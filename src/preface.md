@@ -1,5 +1,8 @@
 # Preface
 
+> The Tokay documentation is currently under heavy development and unfinished.
+> Feel free to contribute in any kind! To do so, visit [https://github.com/tokay-lang](https://github.com/tokay-lang).
+
 Tokay programs are expressed and executed differently as common programmming languages like Rust or Python. Therefore, Tokay is not "yet another programming language". It was designed with the goal to let its programs directly operate on input streams that are either read from files, strings, piped commands or any other device emitting characters.
 
 The most obvious example to show how Tokay executes its programs is this little matcher. It recognizes either "Hello Mercury", "Hello Venus" or "Hello Earth" from a text stream. Any other input is automatically skipped.
