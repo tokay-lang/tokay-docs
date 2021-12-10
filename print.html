@@ -580,7 +580,7 @@ Integer    # built-in token for parsing and returning Integer values
 f : @x{ x * 2 }
 f(9)  # 18
 
-@x{ x * 3 }(5)  # 18, returned by anonymous function that is called in-place
+@x{ x * 3 }(5)  # 15, returned by anonymous function that is called in-place
 </code></pre>
 <p>Objects are discussed in detail in a later chapter below.</p>
 <h2 id="captures-1"><a class="header" href="#captures-1">Captures</a></h2>
@@ -827,7 +827,7 @@ loop {
 </code></pre>
 <h2 id="for"><a class="header" href="#for">for</a></h2>
 <p>The <code>for</code>-keyword introduces a special form of loop that syntacically glues the parts <em>initialization</em>, <em>abort condition</em> and <em>iteration</em> together into a separate syntactic element.</p>
-<pre><code>for count = 10; count &gt;= 0; count-- {
+<pre><code class="language-tokay">for count = 10; count &gt;= 0; count-- {
     print(i)
 }
 </code></pre>
