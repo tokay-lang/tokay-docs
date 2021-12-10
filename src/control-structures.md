@@ -83,7 +83,7 @@ loop print("Forever!")
 
 The `for`-keyword introduces a special form of loop that syntacically glues the parts *initialization*, *abort condition* and *iteration* together into a separate syntactic element.
 
-```
+```tokay
 for count = 10; count >= 0; count-- {
     print(i)
 }

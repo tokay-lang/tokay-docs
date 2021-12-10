@@ -34,7 +34,7 @@ Integer    # built-in token for parsing and returning Integer values
 f : @x{ x * 2 }
 f(9)  # 18
 
-@x{ x * 3 }(5)  # 18, returned by anonymous function that is called in-place
+@x{ x * 3 }(5)  # 15, returned by anonymous function that is called in-place
 ```
 
 Objects are discussed in detail in a later chapter below.
