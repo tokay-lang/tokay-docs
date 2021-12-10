@@ -1,33 +1,33 @@
 # etareneg: Script to in-place generate & substitute code segments
 
-BEGIN				{
-						in_gen = 0
-					}
+BEGIN               {
+                        in_gen = 0
+                    }
 
-/\/\*GENERATE/		{
-						print
+/\/\*GENERATE/      {
+                        print
 
-						if( in_gen )
-							next
+                        if( in_gen )
+                            next
 
-						in_gen = 1
+                        in_gen = 1
 
-						gsub( "\\/\\*GENERATE", "" )
-						gsub( "\\*\\/$", "" )
+                        gsub( "\\/\\*GENERATE", "" )
+                        gsub( "\\*\\/$", "" )
 
-						system( $0 )
+                        system( $0 )
 
-						next
-					}
+                        next
+                    }
 
-/\/\*ETARENEG/		{
-						print
-						in_gen = 0
+/\/\*ETARENEG/      {
+                        print
+                        in_gen = 0
 
-						next
-					}
+                        next
+                    }
 
-					{
-						if( !in_gen )
-							print
-					}
+                    {
+                        if( !in_gen )
+                            print
+                    }
