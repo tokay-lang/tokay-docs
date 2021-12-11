@@ -143,27 +143,36 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="basics"><a class="header" href="#basics">Basics</a></h1>
-<p>This chapter covers the atomic basics of the Tokay programming language in detail.</p>
-<p>Tokay programs are made of the following elements:</p>
+<p>Basically, a Tokay program is established on these parts:</p>
 <ul>
-<li><strong>Items</strong> form atomic values from expressions.</li>
-<li><strong>Sequences</strong> are chained items.</li>
-<li><strong>Blocks</strong> are groups of sequences.</li>
+<li>Items</li>
+<li>Sequences</li>
+<li>Blocks</li>
 </ul>
-<p>All these elements belong together and depend on each other in some way.</p>
-<p>The syntactical base structure of Tokay code always is</p>
+<p>All these parts belong together and depend on each other in some way.</p>
+<p>The following Tokay program demonstrates the usage of all three of these parts in action.</p>
 <pre><code class="language-tokay">{ # A block...
     # ... is made of sequences
-    item1 item2 item3 # ... which are made of items.
+    'Hello' _ Name count_hello++   # ... which are made of items.
 
-    item1 {  # an item of a sequence can be a block again
-        item1 item2 ... # which contains further sequences with items
+    'Goodbye' _ {  # an item of a sequence can be a block again
+        'Max'  count_bye_max++  # ... which contains one sequences with items
+        Name   count_bye++      # ... and a second one, too.
     }
 
     {}  # a sequence with an empty block as its item
 }
 </code></pre>
-<p>The main scope of a Tokay program is also an implicit block, therefore it is not necessary to start every program with a new block.</p>
+<p>This program is a little parser, which looks for greetings in some input.</p>
+<ul>
+<li>The occurence of e.g. <code>Hello Jan</code> and <code>Hello Max</code> causes the variable<code>count_hello</code> to be incremented</li>
+<li>The occurence of e.g. <code>Goodbye Jan</code> increments the counter <code>count_bye</code>, but</li>
+<li>An occurence of <code>Goodbye Max</code>, which is a special case here, counts on <code>count_bye_max</code>.</li>
+</ul>
+<blockquote>
+<p>If you are familiar with the <em>Awk programming language</em>, you might see some similarities to the <code>PATTERN { action }</code>-syntax here.</p>
+<p>In Tokay, <em>PATTERN</em> can be any sequence of items that need to match before, and <em>{ action }</em> can hold further <code>PATTERN { action }</code>-components.</p>
+</blockquote>
 
                     </main>
 

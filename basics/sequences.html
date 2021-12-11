@@ -143,53 +143,48 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="sequences"><a class="header" href="#sequences">Sequences</a></h1>
-<p>Sequences are a fundamental and powerful feature of Tokay, as you will see later. We will only discuss their syntax and simple examples here for now.</p>
-<p>Every single value, call, expression, control-flow statement or even block is considered as an item. We will discuss blocks shortly.
-Those items can be chained to a sequence directly in every line of a Tokay program.</p>
+<p>Sequences are occurences of items in a row.</p>
+<p>Here is a sequence of three items:</p>
 <pre><code class="language-tokay">1 2 3 + 4    # results in a list (1, 2, 7)
 </code></pre>
-<p>For better readability, items of a sequence can also be optionally separated by commas (<code>,</code>), so</p>
+<p>For better readability, items of a sequence can be optionally separated by commas (<code>,</code>), so</p>
 <pre><code class="language-tokay">1, 2, 3 + 4  # (1, 2, 7)
 </code></pre>
 <p>encodes the same.</p>
-<p>All items of a sequence with a given severity are used to determine the result of the sequence. Therefore, these sequences return <code>(1, 2, 7)</code> in the above examples when entered in a Tokay REPL. Severities and automatic value construction of sequences will be discussed later on.</p>
-<p>The items of a sequence are captured, so they can be accessed inside of the sequence using <em>capture variables</em>. In the next example, the first capture, which holds the result <code>7</code> from the expression <code>3 + 4</code> is referenced with <code>$1</code> and used in the second item as value of the expression. Referencing a capture which is out of bounds will just return a <code>void</code> value.</p>
+<p>All items of a sequence with a given severity are used to determine the result of the sequence. Therefore, these sequences return <code>(1, 2, 7)</code> in the above examples when entered in a Tokay REPL. This has to deal with the <a href="items.html#severities">severities</a> the items own.</p>
+<h2 id="captures"><a class="header" href="#captures">Captures</a></h2>
+<p>The items of a sequence are captured, so they can be accessed inside of the sequence using <em>capture variables</em>.</p>
+<p>In the next example, the first capture, which holds the result <code>7</code> from the expression <code>3 + 4</code> is referenced with <code>$1</code> and used in the second item as value of the expression. Referencing a capture which is out of bounds will just return <code>void</code>.</p>
 <pre><code class="language-tokay">3 + 4, $1 * 2  # (7, 14)
 </code></pre>
-<p>Captures can also be re-assigned by following captures. This one assigns a value at the second item to the first item, and uses the first item inside of the calculation. The second item which is the assignment, exists also as item of the sequence and refers to <code>void</code>, as all assignments do. This is the reason why Tokay has two values to simply define nothing, which are <code>void</code> and <code>null</code>.</p>
+<p>Captures can also be re-assigned by subsequent items. The next one assigns a value at the second item to the first item, and uses the first item inside of the calculation. The second item which is the assignment, exists also as item of the sequence and refers to <code>void</code>, as all assignments do.</p>
+<blockquote>
+<p>This is the reason why Tokay has two values to simply define nothing, which are <code>void</code> and <code>null</code>, but null has a higher severity.</p>
+</blockquote>
 <pre><code class="language-tokay">3 + 4, $1 = $1 * 2  # 14
 </code></pre>
 <p>As the result of the above sequence, just one value results which is <code>14</code>, but the second item's value, <code>void</code>, has a lower severity than the calculated and assigned first value. This is the magic with sequences that you will soon figure out in detail, especially when tokens from streams are accessed and processed, or your programs work on extracted information from the input, and the automatic abstract syntax tree construction occurs.</p>
 <p>As the last example, we shortly show how sequence items can also be named and accessed by a more meaningful name than just the index.</p>
 <pre><code class="language-tokay">hello =&gt; &quot;Hello&quot;, $hello = 3 * $hello  # (hello =&gt; &quot;HelloHelloHello&quot;)
 </code></pre>
-<p>Here, the first item, which is referenced by the capture variable <code>$hello</code> is repeated 3 times as the second item.
-It might be quite annoying, but the result of this sequence is a dict as shown in the comment. A dict is a hash-table where values can be referenced by a key.</p>
-<h2 id="newlines"><a class="header" href="#newlines">Newlines</a></h2>
-<p>In Tokay, newlines (line-breaks, <code>\n</code> respectively) are meaningful. They separate sequences from each other, as you will learn in the next section.</p>
-<pre><code class="language-tokay">&quot;1st&quot; &quot;sequence&quot;
-&quot;2nd&quot; &quot;sequence&quot;
-&quot;3rd&quot; &quot;sequence&quot;
-</code></pre>
-<p>Instead of a newline, a semicolon (<code>;</code>) can also be used, which has the same meaning. A single-line sequence can be split into multiple lines by preceding a backslash (<code>\</code>) in front of the line-break.</p>
-<pre><code class="language-tokay">&quot;1st&quot; \
-    &quot;sequence&quot;
-&quot;2nd&quot; &quot;sequence&quot; ; &quot;3rd&quot; &quot;sequence&quot;
-</code></pre>
-<p>The first and second example are literally the same.</p>
-<h2 id="captures"><a class="header" href="#captures">Captures</a></h2>
-<p>Items in sequences are captured during execution. They are temporarily pushed and hold onto a stack, for later access. It is possible to access previously captured items using <em>capture variables</em>. Capture variables start with a dollar-sign (<code>$</code>) followed either by an index, an aliased name or any Tokay expression which evalutes to an index or an aliased named dynamically.</p>
+<p>Here, the first item, which is referenced by the capture variable <code>$hello</code> is repeated 3 times as the second item.</p>
+<p>It might be quite annoying, but the result of this sequence is a <em>dict</em> as shown in the comment. A dict is a hash-table where values can be referenced by a key.</p>
+<blockquote>
+<p>If you come from Python, you might already know about <em>list</em> and <em>dict</em> objects. Their behavior and meaning is similar in Tokay.</p>
+</blockquote>
+<h2 id="parsing-input-sequences"><a class="header" href="#parsing-input-sequences">Parsing input sequences</a></h2>
+<p>As Tokay is a programming language with built-in parsing capabilities, let's see how parsing integrates to sequences and captures.</p>
 <p>Given the expression</p>
 <pre><code class="language-tokay">first =&gt; Word  _  second =&gt; Word  _  third =&gt; Word
 </code></pre>
 <p>executed on the input</p>
 <pre><code>Save the planet
 </code></pre>
-<p>the sequence and input can be broken down into the following components.</p>
+<p>the sequence and input can be broken down into the following components:</p>
 <table>
     <tr>
-        <td class="title">
-            Capture
+        <td>
+            <strong>Capture</strong>
         </td>
         <td>
             $1
@@ -208,8 +203,8 @@ It might be quite annoying, but the result of this sequence is a dict as shown i
         </td>
     </tr>
     <tr>
-        <td class="title">
-            Alias
+        <td>
+            <strong>Alias</strong>
         </td>
         <td>
             $first
@@ -224,8 +219,8 @@ It might be quite annoying, but the result of this sequence is a dict as shown i
         </td>
     </tr>
     <tr>
-        <td class="title">
-            Sequence
+        <td>
+            <strong>Item</strong>
         </td>
         <td>
             first => Word
@@ -244,8 +239,8 @@ It might be quite annoying, but the result of this sequence is a dict as shown i
         </td>
     </tr>
     <tr>
-        <td class="title">
-            Input
+        <td>
+            <strong>Input</strong>
         </td>
         <td>
             "Save"
@@ -265,7 +260,7 @@ It might be quite annoying, but the result of this sequence is a dict as shown i
     </tr>
     <tr>
         <td class="title">
-            $0 contains
+            <strong>$0 contains</strong>
         </td>
         <td>
             "Save"

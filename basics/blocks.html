@@ -144,37 +144,19 @@
                     <main>
                         <h1 id="blocks"><a class="header" href="#blocks">Blocks</a></h1>
 <p>Sequences are organized in blocks. Blocks may contain several sequences, which are executed in order of their definition. Every sequence inside of a block is separated by a newline.</p>
-<ul>
-<li><strong>Blocks</strong> are defined by curly braces <code>{...}</code> and introduce a new alternation of sequences. Sequences in a block are executed in order until an item of a sequence or the sequence itself <em>accepts</em> or <em>rejects</em> the block.</li>
-<li><strong>Sequences</strong> are lines in a block, delimited by either the end of the line, a semicolon <code>;</code> or the blocks closing brace <code>}</code>. They are made of items.</li>
-<li><strong>Items</strong> are
-<ul>
-<li>expressions like <code>1 + 2</code> or <code>++i * 3</code></li>
-<li>assignments like <code>x = 42</code> or <code>s += &quot;duh&quot;</code></li>
-<li>calls to <code>'tokens'</code>, <code>functions()</code> or <code>Parselets</code></li>
-<li>control flow instructions like <code>if x == 42 &quot;yes&quot; else &quot;no&quot;</code></li>
-<li>and even further <code>{ blocks }</code></li>
-</ul>
-</li>
-</ul>
-<pre><code class="language-tokay">{  # a block...
-    # ... has sequences
-    item¹ item² item³ ... # made of items.
-
-    item¹ {  # an item of a sequence can be a block again
-        item¹ item² ... # which contains further sequences with items
-    }
-
-    {}  # this empty block is the only item of the third sequence of the outer block
-}
+<p>The main scope of a Tokay program is also an implicit block, therefore it is not necessary to start every program with a new block.</p>
+<h2 id="newlines"><a class="header" href="#newlines">Newlines</a></h2>
+<p>In Tokay, newlines (line-breaks, <code>\n</code> respectively) are meaningful. They separate sequences from each other, as you will learn in the next section.</p>
+<pre><code class="language-tokay">&quot;1st&quot; &quot;sequence&quot;
+&quot;2nd&quot; &quot;sequence&quot;
+&quot;3rd&quot; &quot;sequence&quot;
 </code></pre>
-<p>Blocks implicitly return the value of the last sequence being executed. Thus,</p>
-<pre><code class="language-tokay">a = {
-    1 + 2
-    4
-}
+<p>Instead of a newline, a semicolon (<code>;</code>) can also be used, which has the same meaning. A single-line sequence can be split into multiple lines by preceding a backslash (<code>\</code>) in front of the line-break.</p>
+<pre><code class="language-tokay">&quot;1st&quot; \
+    &quot;sequence&quot;
+&quot;2nd&quot; &quot;sequence&quot; ; &quot;3rd&quot; &quot;sequence&quot;
 </code></pre>
-<p>assigns <code>4</code> to <code>a</code>, but calculates <code>3</code> in between.</p>
+<p>The first and second example are literally the same.</p>
 
                     </main>
 

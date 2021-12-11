@@ -143,6 +143,52 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="items"><a class="header" href="#items">Items</a></h1>
+<p>Items are the atomic parts of sequences, and represent values.</p>
+<p>The following examples for items are direct values that, once specified, stay on their own.</p>
+<pre><code class="language-tokay">123               # the number 123
+true              # the boolean value for truth
+&quot;Tokay 🦎&quot;        # a unicode string
+</code></pre>
+<p>Items can also be the result of expressions or calls to callable objects.</p>
+<pre><code class="language-tokay">&quot;a &quot; + &quot;string&quot;   # concatenating a string
+42 * 23.5         # the result of a multiplication
+'check'           # the occurence of string &quot;check&quot; in the input
+Integer           # calling a built-in token for parsing integer values
+func(42)          # calling a function
+++count           # the incremented value of count
+</code></pre>
+<p>But items can also be more complex.</p>
+<pre><code class="language-tokay">x = count * 23.5  # the result of a calculation is assigned to a variable
+if x &gt; 100 &quot;much&quot; # conditional expression, which is either &quot;more&quot; or void
+</code></pre>
+<blockquote>
+<p>Every single value, call, expression, control-flow statement or even block is considered to be an item.</p>
+</blockquote>
+<p>There is also a special value called <code>void</code>, which means just &quot;nothing&quot;.</p>
+<p>In the above provided examples, the assignment returns <code>void</code> because the result of the calculation is stored to a variable.<br>
+The conditional <code>if</code>-clause below either returns a string when the condition is met, otherwise it also returns <code>void</code>. Using the <code>else</code> keyword, it would also be possible to return another value instead, e.g.</p>
+<pre><code class="language-tokay">if x &gt; 100 &quot;much&quot; else &quot;less&quot;
+</code></pre>
+<h2 id="severities"><a class="header" href="#severities">Severities</a></h2>
+<p>Every item has a severity, which defines its value's &quot;weight&quot;.</p>
+<p>This is not important for the first steps and programs with Tokay, but a fundamental feature of the magic behind Tokay's automatic value construction features, which will be discussed later.</p>
+<p>Tokay currently knows 4 levels of severitity:</p>
+<ol>
+<li>Whitespace</li>
+<li>Match</li>
+<li>Value</li>
+<li>Result</li>
+</ol>
+<p>The severity of an item depends on how it is constructed. For example</p>
+<pre><code class="language-tokay">123               # pushes 123 with severity 3
+_                 # matches whitespace
+'check'           # matches &quot;check&quot; in input and pushes it considered as match
+''check''         # matches &quot;check&quot; in input and pushes it considered as value
+'check' * 3       # matches &quot;check&quot; in input and repeats it 3 times, resuling in value
+push &quot;yes&quot;        # pushes result value &quot;yes&quot;
+</code></pre>
+<h2 id="conclusion"><a class="header" href="#conclusion">Conclusion</a></h2>
+<p>In conclusion, an item is the result of some expression which always stands for a value. An item in turn is part of a sequence. Every item has a hidden severity, which is important for constructing values from sequences later on.</p>
 
                     </main>
 
