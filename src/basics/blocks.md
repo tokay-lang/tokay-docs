@@ -2,34 +2,23 @@
 
 Sequences are organized in blocks. Blocks may contain several sequences, which are executed in order of their definition. Every sequence inside of a block is separated by a newline.
 
-- **Blocks** are defined by curly braces `{...}` and introduce a new alternation of sequences. Sequences in a block are executed in order until an item of a sequence or the sequence itself *accepts* or *rejects* the block.
-- **Sequences** are lines in a block, delimited by either the end of the line, a semicolon `;` or the blocks closing brace `}`. They are made of items.
-- **Items** are
-  - expressions like `1 + 2` or `++i * 3`
-  - assignments like `x = 42` or `s += "duh"`
-  - calls to `'tokens'`, `functions()` or `Parselets`
-  - control flow instructions like `if x == 42 "yes" else "no"`
-  - and even further `{ blocks }`
+The main scope of a Tokay program is also an implicit block, therefore it is not necessary to start every program with a new block.
+
+## Newlines
+
+In Tokay, newlines (line-breaks, `\n` respectively) are meaningful. They separate sequences from each other, as you will learn in the next section.
 
 ```tokay
-{  # a block...
-    # ... has sequences
-    item¹ item² item³ ... # made of items.
-
-    item¹ {  # an item of a sequence can be a block again
-        item¹ item² ... # which contains further sequences with items
-    }
-
-    {}  # this empty block is the only item of the third sequence of the outer block
-}
+"1st" "sequence"
+"2nd" "sequence"
+"3rd" "sequence"
 ```
 
-Blocks implicitly return the value of the last sequence being executed. Thus,
+Instead of a newline, a semicolon (`;`) can also be used, which has the same meaning. A single-line sequence can be split into multiple lines by preceding a backslash (`\`) in front of the line-break.
 
 ```tokay
-a = {
-    1 + 2
-    4
-}
+"1st" \
+    "sequence"
+"2nd" "sequence" ; "3rd" "sequence"
 ```
-assigns `4` to `a`, but calculates `3` in between.
+The first and second example are literally the same.
