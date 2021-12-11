@@ -174,13 +174,34 @@
 </blockquote>
 <h2 id="parsing-input-sequences"><a class="header" href="#parsing-input-sequences">Parsing input sequences</a></h2>
 <p>As Tokay is a programming language with built-in parsing capabilities, let's see how parsing integrates to sequences and captures.</p>
-<p>Given the expression</p>
-<pre><code class="language-tokay">first =&gt; Word  _  second =&gt; Word  _  third =&gt; Word
+<p>Given the sequence</p>
+<pre><code class="language-tokay">Word __ ''the'' __ Word
 </code></pre>
-<p>executed on the input</p>
+<p>we make use of the built-in token <code>Word</code> which matches anything made of characters and digits, and the special constant <code>__</code>, which matches arbitrary whitespace, but at least one whitespace character must be present. Whitespace is anything represented by non-printable characters, like spaces or tabs.</p>
+<p>We can now run this sequence on any input existing of three words, where the word in the middle is &quot;the&quot;. Let's say</p>
 <pre><code>Save the planet
 </code></pre>
-<p>the sequence and input can be broken down into the following components:</p>
+<p>and we get the output</p>
+<pre><code>(&quot;Save&quot;, &quot;the&quot;, &quot;planet&quot;)
+</code></pre>
+<blockquote>
+<p>To try it out, either start a Tokay REPL with <code>$ tokay -- &quot;Save the planet&quot;</code> and enter the sequence <code>Word __ ''the'' __ Word</code> afterwards, or directly specify both at invocation, like<br>
+<code>$ tokay &quot;Word __ ''the'' __ Word&quot; -- &quot;Save the planet&quot;</code>.</p>
+</blockquote>
+<p>You will see, it's regardless of how many whitespace you insert, the result will always be the same.</p>
+<h3 id="using-alias-variables"><a class="header" href="#using-alias-variables">Using alias variables</a></h3>
+<p>Alias variables can also be used perfectly for parsing, to give items meaningful names and make them independent from their position.</p>
+<pre><code class="language-tokay">predicate =&gt; Word __ 'the' __ object =&gt; Word
+</code></pre>
+<p>will output</p>
+<pre><code>(object =&gt; &quot;planet&quot;, predicate =&gt; &quot;Save&quot;)
+</code></pre>
+<blockquote>
+<p>In this case, &quot;the&quot; was degrated to a touch, to make the output more clear.</p>
+</blockquote>
+<h3 id="the-special-capture-0"><a class="header" href="#the-special-capture-0">The special capture $0</a></h3>
+<p>There is also a special capture variable called $0. It contains the input captured by the currently executed parselet the sequence belongs to, but it can also be assigned to any other value.</p>
+<p>Let's see how all capture variables, including $0, are growing when the items from the examples above are being executed.</p>
 <table>
     <tr>
         <td>
@@ -207,15 +228,13 @@
             <strong>Alias</strong>
         </td>
         <td>
-            $first
+            $predicate
         </td>
         <td></td>
-        <td>
-            $second
-        </td>
+        <td></td>
         <td></td>
         <td>
-            $third
+            $object
         </td>
     </tr>
     <tr>
@@ -223,19 +242,19 @@
             <strong>Item</strong>
         </td>
         <td>
-            first => Word
+            <code>predicate => Word</code>
         </td>
         <td>
-            _
+            <code>__</code>
         </td>
         <td>
-            second => Word
+            <code>'the'</code>
         </td>
         <td>
-            _
+            <code>__</code>
         </td>
         <td>
-            third => Word
+            <code>object => Word</code>
         </td>
     </tr>
     <tr>
@@ -255,11 +274,11 @@
             " "
         </td>
         <td>
-            "Planet"
+            "planet"
         </td>
     </tr>
     <tr>
-        <td class="title">
+        <td>
             <strong>$0 contains</strong>
         </td>
         <td>
@@ -280,22 +299,6 @@
     </tr>
 </table>
 <p>As you can see, <code>$0</code> always contains the input matched so far from the start of the capture.</p>
-<p>Tokay also allows to assign values to captures. This makes it possible to directly use captures like any other variable inside of the sequence and any subsequent blocks that belong to the sequence.</p>
-<pre><code class="language-tokay"># planets2.tok
-Name {
-    if $1 == &quot;Earth&quot; {
-        $1 = &quot;Home&quot;
-    }
-    else if $1 == &quot;Mars&quot; || $1 == &quot;Venus&quot; {
-        $1 += &quot; (neighbour)&quot;
-    }
-}
-</code></pre>
-<pre><code class="language-shell">$ tokay planets2.tok -- &quot;Mercury Venus Earth Mars Jupiter&quot;
-(&quot;Mercury&quot;, &quot;Venus (neighbour)&quot;, &quot;Home&quot;, &quot;Mars (neighbour)&quot;, &quot;Jupiter&quot;)
-</code></pre>
-<h2 id="push"><a class="header" href="#push">push</a></h2>
-<h2 id="next"><a class="header" href="#next">next</a></h2>
 
                     </main>
 
