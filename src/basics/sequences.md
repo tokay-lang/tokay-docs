@@ -50,15 +50,46 @@ It might be quite annoying, but the result of this sequence is a *dict* as shown
 
 As Tokay is a programming language with built-in parsing capabilities, let's see how parsing integrates to sequences and captures.
 
-Given the expression
+Given the sequence
 ```tokay
-first => Word  _  second => Word  _  third => Word
+Word __ ''the'' __ Word
 ```
-executed on the input
+we make use of the built-in token `Word` which matches anything made of characters and digits, and the special constant `__`, which matches arbitrary whitespace, but at least one whitespace character must be present. Whitespace is anything represented by non-printable characters, like spaces or tabs.
+
+We can now run this sequence on any input existing of three words, where the word in the middle is "the". Let's say
 ```
 Save the planet
 ```
-the sequence and input can be broken down into the following components:
+and we get the output
+```
+("Save", "the", "planet")
+```
+
+> To try it out, either start a Tokay REPL with `$ tokay -- "Save the planet"` and enter the sequence `Word __ ''the'' __ Word` afterwards, or directly specify both at invocation, like<br>
+> `$ tokay "Word __ ''the'' __ Word" -- "Save the planet"`.
+
+You will see, it's regardless of how many whitespace you insert, the result will always be the same.
+
+### Using alias variables
+
+Alias variables can also be used perfectly for parsing, to give items meaningful names and make them independent from their position.
+
+```tokay
+predicate => Word __ 'the' __ object => Word
+```
+will output
+```
+(object => "planet", predicate => "Save")
+```
+
+> In this case, "the" was degrated to a touch, to make the output more clear.
+
+### The special capture $0
+
+There is also a special capture variable called $0. It contains the input captured by the currently executed parselet the sequence belongs to, but it can also be assigned to any other value.
+
+Let's see how all capture variables, including $0, are growing when the items from the examples above are being executed.
+
 <table>
     <tr>
         <td>
@@ -85,15 +116,13 @@ the sequence and input can be broken down into the following components:
             <strong>Alias</strong>
         </td>
         <td>
-            $first
+            $predicate
         </td>
         <td></td>
-        <td>
-            $second
-        </td>
+        <td></td>
         <td></td>
         <td>
-            $third
+            $object
         </td>
     </tr>
     <tr>
@@ -101,19 +130,19 @@ the sequence and input can be broken down into the following components:
             <strong>Item</strong>
         </td>
         <td>
-            first => Word
+            <code>predicate => Word</code>
         </td>
         <td>
-            _
+            <code>__</code>
         </td>
         <td>
-            second => Word
+            <code>'the'</code>
         </td>
         <td>
-            _
+            <code>__</code>
         </td>
         <td>
-            third => Word
+            <code>object => Word</code>
         </td>
     </tr>
     <tr>
@@ -133,11 +162,11 @@ the sequence and input can be broken down into the following components:
             " "
         </td>
         <td>
-            "Planet"
+            "planet"
         </td>
     </tr>
     <tr>
-        <td class="title">
+        <td>
             <strong>$0 contains</strong>
         </td>
         <td>
@@ -159,27 +188,3 @@ the sequence and input can be broken down into the following components:
 </table>
 
 As you can see, `$0` always contains the input matched so far from the start of the capture.
-
-Tokay also allows to assign values to captures. This makes it possible to directly use captures like any other variable inside of the sequence and any subsequent blocks that belong to the sequence.
-
-```tokay
-# planets2.tok
-Name {
-    if $1 == "Earth" {
-        $1 = "Home"
-    }
-    else if $1 == "Mars" || $1 == "Venus" {
-        $1 += " (neighbour)"
-    }
-}
-```
-
-```shell
-$ tokay planets2.tok -- "Mercury Venus Earth Mars Jupiter"
-("Mercury", "Venus (neighbour)", "Home", "Mars (neighbour)", "Jupiter")
-```
-
-
-## push
-
-## next
