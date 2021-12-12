@@ -152,14 +152,19 @@
 </code></pre>
 <p>encodes the same.</p>
 <p>All items of a sequence with a given severity are used to determine the result of the sequence. Therefore, these sequences return <code>(1, 2, 7)</code> in the above examples when entered in a Tokay REPL. This has to deal with the <a href="items.html#severities">severities</a> the items own.</p>
+<p>The end of the sequence is delimited by a line-break, but the sequence can be wrapped into to multiple using a backslash before the line-break. So</p>
+<pre><code class="language-tokay">1, 2 \
+3 + 4  # (1, 2, 7)
+</code></pre>
+<p>means also the same as above.</p>
 <h2 id="captures"><a class="header" href="#captures">Captures</a></h2>
-<p>The items of a sequence are captured, so they can be accessed inside of the sequence using <em>capture variables</em>.</p>
+<p>The already executed items of a sequence are captured, so they can be accessed inside of the sequence using <em>capture variables</em>.</p>
 <p>In the next example, the first capture, which holds the result <code>7</code> from the expression <code>3 + 4</code> is referenced with <code>$1</code> and used in the second item as value of the expression. Referencing a capture which is out of bounds will just return <code>void</code>.</p>
 <pre><code class="language-tokay">3 + 4, $1 * 2  # (7, 14)
 </code></pre>
 <p>Captures can also be re-assigned by subsequent items. The next one assigns a value at the second item to the first item, and uses the first item inside of the calculation. The second item which is the assignment, exists also as item of the sequence and refers to <code>void</code>, as all assignments do.</p>
 <blockquote>
-<p>This is the reason why Tokay has two values to simply define nothing, which are <code>void</code> and <code>null</code>, but null has a higher severity.</p>
+<p>This is the reason why Tokay has two values to simply define nothing, which are <code>void</code> and <code>null</code>, but <code>null</code> has a higher precedence.</p>
 </blockquote>
 <pre><code class="language-tokay">3 + 4, $1 = $1 * 2  # 14
 </code></pre>
@@ -188,20 +193,29 @@
 <p>To try it out, either start a Tokay REPL with <code>$ tokay -- &quot;Save the planet&quot;</code> and enter the sequence <code>Word __ ''the'' __ Word</code> afterwards, or directly specify both at invocation, like<br>
 <code>$ tokay &quot;Word __ ''the'' __ Word&quot; -- &quot;Save the planet&quot;</code>.</p>
 </blockquote>
-<p>You will see, it's regardless of how many whitespace you insert, the result will always be the same.</p>
-<h3 id="using-alias-variables"><a class="header" href="#using-alias-variables">Using alias variables</a></h3>
-<p>Alias variables can also be used perfectly for parsing, to give items meaningful names and make them independent from their position.</p>
+<p>You will see, it's regardless of how many whitespace you insert, the result will always be the same. The reason for this are the item <a href="items.html#severities">severities</a> discussed earlier. Whitespace, used by the pre-defined constant <code>__</code>, has a lower severity, and therefore won't make it in the result of the sequence.</p>
+<h3 id="using-capture-aliases"><a class="header" href="#using-capture-aliases">Using capture aliases</a></h3>
+<p>Captures can also have a name, called &quot;alias&quot;. This is ideal for parsing, to give items meaningful names and make them independent from their position.</p>
 <pre><code class="language-tokay">predicate =&gt; Word __ 'the' __ object =&gt; Word
 </code></pre>
 <p>will output</p>
 <pre><code>(object =&gt; &quot;planet&quot;, predicate =&gt; &quot;Save&quot;)
 </code></pre>
 <blockquote>
-<p>In this case, &quot;the&quot; was degrated to a touch, to make the output more clear.</p>
+<p>In this example, the match for the word <code>''the''</code> was degrated to a touch <code>'the'</code>, which has a lower item severity and won't make it into the sequence result.</p>
+<p>This was done to make the output more clear, and because &quot;the&quot; is only an article without relevance to the meaning of the sentence we try to parse.</p>
 </blockquote>
-<h3 id="the-special-capture-0"><a class="header" href="#the-special-capture-0">The special capture $0</a></h3>
-<p>There is also a special capture variable called $0. It contains the input captured by the currently executed parselet the sequence belongs to, but it can also be assigned to any other value.</p>
-<p>Let's see how all capture variables, including $0, are growing when the items from the examples above are being executed.</p>
+<p>Now we can also work with alias variables inside of the sequence</p>
+<pre><code class="language-tokay">predicate =&gt; Word __ 'the' __ object =&gt; Word \
+    print(&quot;What to &quot; + $predicate.lower() + &quot;? The &quot; + $object + &quot;!&quot;)
+</code></pre>
+<p>will output</p>
+<pre><code>What to save? The planet!
+</code></pre>
+<p>The advantage here is, that we can change the sequence to further items in between, and don't have to change all references to these items in the print function call, because they are identified by name, and not by their offset, which might have changed.</p>
+<h3 id="the-capture-variable-0"><a class="header" href="#the-capture-variable-0">The capture variable $0</a></h3>
+<p>There is also a special capture variable <code>$0</code>. It contains the input captured by the currently executed parselet the sequence belongs to. A parselet is a function that consumes some sort of input, which will be discussed later.</p>
+<p>Let's see how all capture variables, including <code>$0</code>, are growing when the items from the examples above are being executed.</p>
 <table>
     <tr>
         <td>
@@ -298,7 +312,14 @@
         </td>
     </tr>
 </table>
-<p>As you can see, <code>$0</code> always contains the input matched so far from the start of the capture.</p>
+<p>As you can see, <code>$0</code> always contains the input matched so far from the start of the parselet.</p>
+<p><code>$0</code> can also be assigned to any other value, which makes it the result of the parselet in case no other result of higher precedence was set.</p>
+<h2 id="sequence-interruption"><a class="header" href="#sequence-interruption">Sequence interruption</a></h2>
+<p>todo</p>
+<h2 id="conclusion"><a class="header" href="#conclusion">Conclusion</a></h2>
+<p>Sequences define occurences of items. An item inside of a sequence can have a meanigful alias.</p>
+<p>Every item of a sequence that has been executed is called <em>a capture</em>, and can be accessed using context-variables, either by their offset (position of occurence) like <code>$1</code>, <code>$2</code>, <code>$3</code> or by their alias, like <code>$predicate</code>.</p>
+<p>The special capture <code>$0</code> provides the consumed information read so far by the parselet, and can also be set to a value.</p>
 
                     </main>
 
