@@ -25,25 +25,32 @@ But items can also be more complex.
 
 ```tokay
 x = count * 23.5  # the result of a calculation is assigned to a variable
+```
+
+This is an assignment, and always produces the item value `void`, which means just "nothing". This is, because the result of the calculation is stored to a variable, but the item must represent some value.
+
+Here's another item:
+```tokay
 if x > 100 "much" # conditional expression, which is either "more" or void
 ```
 
-> Every single value, call, expression, control-flow statement or even block is considered to be an item.
+This `if`-clause allows for conditional programming. It either produces a string when the provided condition is met, and otherwise also produces `void`.
 
-There is also a special value called `void`, which means just "nothing".
-
-In the above provided examples, the assignment returns `void` because the result of the calculation is stored to a variable.<br>
-The conditional `if`-clause below either returns a string when the condition is met, otherwise it also returns `void`. Using the `else` keyword, it would also be possible to return another value instead, e.g.
+This behavior can be changed by providing an `else`-branch next, like this:
 
 ```tokay
 if x > 100 "much" else "less"
 ```
 
+As you see, every single value, call, expression or control-flow statement is considered to be an item.
+
+A [block](blocks.html) is also an item as well, but this will be disussed later.
+
 ## Severities
 
-Every item has a severity, which defines its value's "weight".
+> This is not important for the first steps and programs with Tokay, but a fundamental feature of the magic behind Tokay's automatic value construction features, which will be discussed later. You should know about it!
 
-This is not important for the first steps and programs with Tokay, but a fundamental feature of the magic behind Tokay's automatic value construction features, which will be discussed later.
+Every item has a severity, which defines its value's "weight".
 
 Tokay currently knows 4 levels of severitity:
 
@@ -62,6 +69,8 @@ _                 # matches whitespace
 'check' * 3       # matches "check" in input and repeats it 3 times, resuling in value
 push "yes"        # pushes result value "yes"
 ```
+
+Right now, this isn't so important, and you shouldn't keep this in mind all the time. It will become useful during the next chapters, and especially when writing programs that parse or extract data off something.
 
 ## Conclusion
 

@@ -14,9 +14,17 @@ encodes the same.
 
 All items of a sequence with a given severity are used to determine the result of the sequence. Therefore, these sequences return `(1, 2, 7)` in the above examples when entered in a Tokay REPL. This has to deal with the [severities](items.html#severities) the items own.
 
+The end of the sequence is delimited by a line-break, but the sequence can be wrapped into to multiple using a backslash before the line-break. So
+
+```tokay
+1, 2 \
+3 + 4  # (1, 2, 7)
+```
+means also the same as above.
+
 ## Captures
 
-The items of a sequence are captured, so they can be accessed inside of the sequence using *capture variables*.
+The already executed items of a sequence are captured, so they can be accessed inside of the sequence using *capture variables*.
 
 In the next example, the first capture, which holds the result `7` from the expression `3 + 4` is referenced with `$1` and used in the second item as value of the expression. Referencing a capture which is out of bounds will just return `void`.
 
@@ -26,7 +34,7 @@ In the next example, the first capture, which holds the result `7` from the expr
 
 Captures can also be re-assigned by subsequent items. The next one assigns a value at the second item to the first item, and uses the first item inside of the calculation. The second item which is the assignment, exists also as item of the sequence and refers to `void`, as all assignments do.
 
-> This is the reason why Tokay has two values to simply define nothing, which are `void` and `null`, but null has a higher severity.
+> This is the reason why Tokay has two values to simply define nothing, which are `void` and `null`, but `null` has a higher precedence.
 
 ```tokay
 3 + 4, $1 = $1 * 2  # 14
@@ -68,11 +76,11 @@ and we get the output
 > To try it out, either start a Tokay REPL with `$ tokay -- "Save the planet"` and enter the sequence `Word __ ''the'' __ Word` afterwards, or directly specify both at invocation, like<br>
 > `$ tokay "Word __ ''the'' __ Word" -- "Save the planet"`.
 
-You will see, it's regardless of how many whitespace you insert, the result will always be the same.
+You will see, it's regardless of how many whitespace you insert, the result will always be the same. The reason for this are the item [severities](items.html#severities) discussed earlier. Whitespace, used by the pre-defined constant `__`, has a lower severity, and therefore won't make it in the result of the sequence.
 
-### Using alias variables
+### Using capture aliases
 
-Alias variables can also be used perfectly for parsing, to give items meaningful names and make them independent from their position.
+Captures can also have a name, called "alias". This is ideal for parsing, to give items meaningful names and make them independent from their position.
 
 ```tokay
 predicate => Word __ 'the' __ object => Word
@@ -82,13 +90,27 @@ will output
 (object => "planet", predicate => "Save")
 ```
 
-> In this case, "the" was degrated to a touch, to make the output more clear.
+> In this example, the match for the word `''the''` was degrated to a touch `'the'`, which has a lower item severity and won't make it into the sequence result.
+>
+> This was done to make the output more clear, and because "the" is only an article without relevance to the meaning of the sentence we try to parse.
 
-### The special capture $0
+Now we can also work with alias variables inside of the sequence
+```tokay
+predicate => Word __ 'the' __ object => Word \
+    print("What to " + $predicate.lower() + "? The " + $object + "!")
+```
+will output
+```
+What to save? The planet!
+```
 
-There is also a special capture variable called $0. It contains the input captured by the currently executed parselet the sequence belongs to, but it can also be assigned to any other value.
+The advantage here is, that we can change the sequence to further items in between, and don't have to change all references to these items in the print function call, because they are identified by name, and not by their offset, which might have changed.
 
-Let's see how all capture variables, including $0, are growing when the items from the examples above are being executed.
+### The capture variable $0
+
+There is also a special capture variable `$0`. It contains the input captured by the currently executed parselet the sequence belongs to. A parselet is a function that consumes some sort of input, which will be discussed later.
+
+Let's see how all capture variables, including `$0`, are growing when the items from the examples above are being executed.
 
 <table>
     <tr>
@@ -187,4 +209,18 @@ Let's see how all capture variables, including $0, are growing when the items fr
     </tr>
 </table>
 
-As you can see, `$0` always contains the input matched so far from the start of the capture.
+As you can see, `$0` always contains the input matched so far from the start of the parselet.
+
+`$0` can also be assigned to any other value, which makes it the result of the parselet in case no other result of higher precedence was set.
+
+## Sequence interruption
+
+todo
+
+## Conclusion
+
+Sequences define occurences of items. An item inside of a sequence can have a meanigful alias.
+
+Every item of a sequence that has been executed is called *a capture*, and can be accessed using context-variables, either by their offset (position of occurence) like `$1`, `$2`, `$3` or by their alias, like `$predicate`.
+
+The special capture `$0` provides the consumed information read so far by the parselet, and can also be set to a value.
