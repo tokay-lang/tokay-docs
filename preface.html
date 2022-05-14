@@ -7,7 +7,7 @@
 
 
         <!-- Custom HTML head -->
-
+        
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -89,7 +89,7 @@
         <div id="page-wrapper" class="page-wrapper">
 
             <div class="page">
-                <div id="menu-bar-hover-placeholder"></div>
+                                <div id="menu-bar-hover-placeholder"></div>
                 <div id="menu-bar" class="menu-bar sticky bordered">
                     <div class="left-buttons">
                         <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
@@ -145,18 +145,18 @@
                         <h1 id="preface"><a class="header" href="#preface">Preface</a></h1>
 <blockquote>
 <p>The Tokay documentation is currently under heavy development and unfinished.
-Feel free to contribute in any kind! To do so, visit <a href="https://github.com/tokay-lang">https://github.com/tokay-lang</a>.</p>
+Feel free to contribute! To do so, visit <a href="https://github.com/tokay-lang">https://github.com/tokay-lang</a>.</p>
 </blockquote>
-<p>Tokay programs are expressed and executed differently as common programmming languages like Rust or Python. Therefore, Tokay is not &quot;yet another programming language&quot;. It was designed with the goal to let its programs directly operate on input streams that are either read from files, strings, piped commands or any other device emitting characters.</p>
-<p>The most obvious example to show how Tokay executes its programs is this little matcher. It recognizes either &quot;Hello Mercury&quot;, &quot;Hello Venus&quot; or &quot;Hello Earth&quot; from a text stream. Any other input is automatically skipped.</p>
+<p>Tokay is a programming language designed for ad-hoc parsing and text processing. Tokay programs operate directly on input streams that are read from files, strings, piped commands or any other device emitting characters.</p>
+<p>The following example is a short Tokay program that illustrates how Tokay works. It recognizes either &quot;Hello Mercury&quot;, &quot;Hello Venus&quot; or &quot;Hello Earth&quot; from a text stream. Any other input is automatically skipped.</p>
 <pre><code class="language-tokay">'Hello' _ {
     'Mercury'
     'Venus'
     'Earth'
 }
 </code></pre>
-<p>In comparison to a general purpose programming languages, there's no explicit branching, substring extraction or reading from input required, as this is directly built into the language and its entire structuring.</p>
-<p>If you're familiar with <a href="https://en.wikipedia.org/wiki/AWK">awk</a>, you might find a similarity in above example to awk's <code>PATTERN { action }</code> syntax. This approach is recursive in Tokay, so that the action-part again is a further pattern area, or just action code. This is exactly where the intention behind Tokay starts, but not by thinking of a line-based execution working on fields, but a token-based approach working on anything matched from the input, including recursive structures that can be expressed by a grammar.</p>
+<p>Unlike general purpose programming languages like Rust or Python, in Tokay no explicit branching, substring extraction, or reading from input is required. Instead, these operations are directly built into the language.</p>
+<p>If you're familiar with <a href="https://en.wikipedia.org/wiki/AWK">awk</a>, you might find the syntax in the previous example to be similar to awk's <code>PATTERN { action }</code> syntax. This approach is recursive in Tokay, so that the action-part can also be treated as a pattern, or as plain action code. This highlights a core tenet of Tokay's design and its key difference from awk: instead of using a line-based execution model, Tokay takes a token-based approach that permits operating on anything matched from the input. This enables Tokay programs to operate on recursive structures that can be expressed by a grammar.</p>
 
                     </main>
 
