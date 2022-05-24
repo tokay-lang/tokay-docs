@@ -190,7 +190,8 @@ s += &quot;!&quot;
 <p>A list is a sequence of arbitrary values in a row. Therefore, a list can also contain further lists, or other complex objects. A list is also mutable, which means items can be extended or removed during runtime.</p>
 <pre><code class="language-tokay"># list of values
 (42, true, &quot;yes&quot;)
-(42 true &quot;yes&quot;)
+l = (42 true &quot;yes&quot;)
+l.len()  # 3
 </code></pre>
 <p>Lists can be concatenated by the <code>+</code>- and <code>+=</code>-operators, and provide the following methods:</p>
 <ul>
@@ -204,7 +205,7 @@ s += &quot;!&quot;
 <pre><code class="language-tokay"># dictionary (dict), a map of key-value-pairs
 (i =&gt; 42, b =&gt; true, status =&gt; &quot;success&quot;)
 d = (i =&gt; 42 b =&gt; true status =&gt; &quot;success&quot;)
-d.push()
+d.update((x =&gt; 23.5))
 </code></pre>
 <blockquote>
 <p>Currently, as of Tokay v0.5 and below, Dicts in Tokay only support for strings as keys. This behavior is currently discussed and may change in a future version! This is also the reason for a lack of method implementations for dicts currently. See <a href="https://github.com/tokay-lang/tokay/issues/50">#50</a> for details.</p>
