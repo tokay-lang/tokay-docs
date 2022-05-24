@@ -82,7 +82,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="preface.html"><strong aria-hidden="true">1.</strong> Preface</a></li><li class="chapter-item expanded "><a href="getting-started.html"><strong aria-hidden="true">2.</strong> Getting started</a></li><li class="chapter-item expanded "><a href="basics/index.html"><strong aria-hidden="true">3.</strong> Basics</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="basics/items.html"><strong aria-hidden="true">3.1.</strong> Items</a></li><li class="chapter-item expanded "><a href="basics/sequences.html"><strong aria-hidden="true">3.2.</strong> Sequences</a></li><li class="chapter-item expanded "><a href="basics/blocks.html"><strong aria-hidden="true">3.3.</strong> Blocks</a></li></ol></li><li class="chapter-item expanded "><a href="concepts/index.html"><strong aria-hidden="true">4.</strong> Concepts</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="concepts/terminology.html"><strong aria-hidden="true">4.1.</strong> Terminology</a></li><li class="chapter-item expanded "><a href="concepts/values.html"><strong aria-hidden="true">4.2.</strong> Values</a></li><li class="chapter-item expanded "><a href="concepts/objects.html"><strong aria-hidden="true">4.3.</strong> Objects</a></li><li class="chapter-item expanded "><a href="concepts/tokens.html"><strong aria-hidden="true">4.4.</strong> Tokens</a></li><li class="chapter-item expanded "><a href="concepts/parselets.html"><strong aria-hidden="true">4.5.</strong> Parselets</a></li></ol></li><li class="chapter-item expanded "><a href="control-structures.html"><strong aria-hidden="true">5.</strong> Control structures</a></li><li class="chapter-item expanded "><a href="appendix/index.html"><strong aria-hidden="true">6.</strong> Appendix</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="appendix/keywords.html"><strong aria-hidden="true">6.1.</strong> A - Keywords</a></li><li class="chapter-item expanded "><a href="appendix/operators.html"><strong aria-hidden="true">6.2.</strong> B - Operators</a></li><li class="chapter-item expanded "><a href="appendix/modifiers.html"><strong aria-hidden="true">6.3.</strong> C - Modifiers</a></li><li class="chapter-item expanded "><a href="appendix/builtins.html"><strong aria-hidden="true">6.4.</strong> D - Builtins</a></li><li class="chapter-item expanded "><a href="appendix/escape-sequences.html"><strong aria-hidden="true">6.5.</strong> E - Escape sequences</a></li></ol></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="preface.html"><strong aria-hidden="true">1.</strong> Preface</a></li><li class="chapter-item expanded "><a href="getting-started.html"><strong aria-hidden="true">2.</strong> Getting started</a></li><li class="chapter-item expanded "><a href="basics/index.html"><strong aria-hidden="true">3.</strong> Basics</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="basics/items.html"><strong aria-hidden="true">3.1.</strong> Items</a></li><li class="chapter-item expanded "><a href="basics/sequences.html"><strong aria-hidden="true">3.2.</strong> Sequences</a></li><li class="chapter-item expanded "><a href="basics/blocks.html"><strong aria-hidden="true">3.3.</strong> Blocks</a></li></ol></li><li class="chapter-item expanded "><a href="concepts/index.html"><strong aria-hidden="true">4.</strong> Concepts</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="concepts/terminology.html"><strong aria-hidden="true">4.1.</strong> Terminology</a></li><li class="chapter-item expanded "><a href="concepts/values.html"><strong aria-hidden="true">4.2.</strong> Values</a></li><li class="chapter-item expanded "><a href="concepts/tokens.html"><strong aria-hidden="true">4.3.</strong> Tokens</a></li><li class="chapter-item expanded "><a href="concepts/parselets.html"><strong aria-hidden="true">4.4.</strong> Parselets</a></li></ol></li><li class="chapter-item expanded "><a href="control-structures.html"><strong aria-hidden="true">5.</strong> Control structures</a></li><li class="chapter-item expanded "><a href="appendix/index.html"><strong aria-hidden="true">6.</strong> Appendix</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="appendix/keywords.html"><strong aria-hidden="true">6.1.</strong> A - Keywords</a></li><li class="chapter-item expanded "><a href="appendix/operators.html"><strong aria-hidden="true">6.2.</strong> B - Operators</a></li><li class="chapter-item expanded "><a href="appendix/modifiers.html"><strong aria-hidden="true">6.3.</strong> C - Modifiers</a></li><li class="chapter-item expanded "><a href="appendix/builtins.html"><strong aria-hidden="true">6.4.</strong> D - Builtins</a></li><li class="chapter-item expanded "><a href="appendix/escape-sequences.html"><strong aria-hidden="true">6.5.</strong> E - Escape sequences</a></li></ol></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -612,161 +612,112 @@ f(42)
 x y z
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="values"><a class="header" href="#values">Values</a></h1>
-<p>Let's discuss the meaning of values in Tokay next. Values are used everywhere, even when its not directly obvious. Generally speaking, everything in Tokay is some kind of value or part of a value.</p>
-<p><em>Atomic</em> values are one of the following.</p>
+<p>Generally, everything in Tokay is some kind of value or part of a value. The term &quot;value&quot; refers to both simple atomic values like booleans, numbers, strings but also objects which are partly mutable, recursive or callable.</p>
+<h2 id="atomics"><a class="header" href="#atomics">Atomics</a></h2>
+<p><em>Atomic</em> values stand on their own and are generally not mutable in the sense of an object. These values are the following:</p>
 <pre><code class="language-tokay">void           # values to representing just nothing
 null           # values representing a defined &quot;set to null&quot;
 true false     # boolean values
-42 -23         # signed 64-bit integers
-3.1415 -1.337  # signed 64-bit floats
-&quot;Tokay 🦎&quot;     # unicode strings
 </code></pre>
-<p>Values can also be one of the following <em>objects</em>.</p>
+<p>Using the builtin function <code>bool(v)</code>, a boolean value can be constructed from any other value <code>v</code>, by testing for truth.</p>
+<h2 id="numbers"><a class="header" href="#numbers">Numbers</a></h2>
+<p>Tokay supports <code>int</code> and <code>float</code> as numeric types.</p>
+<pre><code class="language-tokay">42 -23         # signed 64-bit integer number object
+3.1415 -1.337  # signed 64-bit float number object
+</code></pre>
+<p>For numbers, the following methods can be used:</p>
+<ul>
+<li><code>int(v)</code> contructs an int value from any other value <code>v</code></li>
+<li><code>float(v)</code> contructs a float value from any other value <code>v</code></li>
+<li><code>float.ceil()</code> - returns the next integer ceiling of a float</li>
+<li><code>float.fract()</code> - returns only the fractional part of a float</li>
+<li><code>float.trunc()</code> - truncates the fractional part off a float</li>
+</ul>
+<blockquote>
+<p>As of Tokay v0.5, the internal implementation of numbers is unstable, and will be clarified in a future version. See <a href="https://github.com/tokay-lang/tokay/issues/52">#52</a> for details.</p>
+</blockquote>
+<h2 id="strings"><a class="header" href="#strings">Strings</a></h2>
+<p>A string (&quot;str&quot;) is a unicode-character sequence of arbitrary length.</p>
+<pre><code class="language-tokay">s = &quot;Tokay 🦎&quot;
+s = s + &quot; is cool&quot;
+s += &quot;!&quot;
+</code></pre>
+<p>Str objects can be concatenated by the <code>+</code>- and <code>+=</code>-operators, multiplied by the <code>*</code>- and <code>*=</code>-operators and provide the following methods:</p>
+<ul>
+<li><code>str(v)</code> - constructs a string object from any other value <code>v</code></li>
+<li><code>str.byteslen()</code> - return total length of bytes used by the string</li>
+<li><code>str.endswith(s)</code> - check if string ends with postfix <code>s</code></li>
+<li><code>str.join(l)</code> - create a string delimited by str from a list <code>l</code></li>
+<li><code>str.len()</code> - return number of characters in the string</li>
+<li><code>str.lower()</code> - turns any upper-case characters of a string into lower-case order</li>
+<li><code>str.replace(from, to=&quot;&quot;, n=void)</code> - replace string <code>from</code> by <code>to</code> for at least <code>n</code>-times</li>
+<li><code>str.startswith(s)</code> - check if string begins with prefix <code>s</code></li>
+<li><code>str.substr(start=0, length=void)</code> - returns a substring from <code>start</code> of <code>length</code> or to the end</li>
+<li><code>str.upper()</code> - turns any lower-case characters of a string into lower-case order</li>
+</ul>
+<h2 id="lists"><a class="header" href="#lists">Lists</a></h2>
+<p>A list is a sequence of arbitrary values in a row. Therefore, a list can also contain further lists, or other complex objects. A list is also mutable, which means items can be extended or removed during runtime.</p>
 <pre><code class="language-tokay"># list of values
 (42, true, &quot;yes&quot;)
 (42 true &quot;yes&quot;)
-
-# dictionary (dict), a map of key-value-pairs
+</code></pre>
+<p>Lists can be concatenated by the <code>+</code>- and <code>+=</code>-operators, and provide the following methods:</p>
+<ul>
+<li><code>list(*args)</code> - constructs a new list from all arguments provided</li>
+<li><code>list.len()</code> - returns number of items in the list</li>
+<li><code>list.push(item, index=void)</code> - either appends an <code>item</code> to the list or inserts it at position <code>index</code></li>
+<li><code>list.pop(index=void)</code> - either pops the last item off the list or removes and returns item at position <code>index</code></li>
+</ul>
+<h2 id="dicts"><a class="header" href="#dicts">Dicts</a></h2>
+<p>Dictionaries (&quot;dicts&quot;) are hash tables or maps with key-value-pairs, where a value is referenced by using the key as its storage location.</p>
+<pre><code class="language-tokay"># dictionary (dict), a map of key-value-pairs
 (i =&gt; 42, b =&gt; true, status =&gt; &quot;success&quot;)
-(i =&gt; 42 b =&gt; true status =&gt; &quot;success&quot;)
-
-# tokens are callables consuming input from the stream
-'touch'    # silently touch a string in the input
-''match''  # verbosely match a string from the input
-[A-Z0-9]+  # matching a sequence of valid characters
-Integer    # built-in token for parsing and returning Integer values
-
-# functions and parselets are callable, enclosed blocks of code
-f : @x{ x * 2 }
+d = (i =&gt; 42 b =&gt; true status =&gt; &quot;success&quot;)
+d.push()
+</code></pre>
+<blockquote>
+<p>Currently, as of Tokay v0.5 and below, Dicts in Tokay only support for strings as keys. This behavior is currently discussed and may change in a future version! This is also the reason for a lack of method implementations for dicts currently. See <a href="https://github.com/tokay-lang/tokay/issues/50">#50</a> for details.</p>
+</blockquote>
+<p>In Tokay v0.5, dicts provide the following methods:</p>
+<ul>
+<li><code>dict()</code> - creates a new, empty dict</li>
+<li><code>dict.len()</code> - returns number of items in the dict</li>
+<li><code>dict.update(other)</code> - merges two dicts</li>
+</ul>
+<h2 id="tokens-1"><a class="header" href="#tokens-1">Tokens</a></h2>
+<p>Tokens are callables consuming input from the stream. They are object values as well. They always return a value parsed from the input stream in case the token matches. Otherwise, tokens usually reject the current block branch or parselet, to try other alternatives.</p>
+<pre><code class="language-tokay">'touch'    # silently touch a string in the input (low severity)
+''match''  # verbosely match a string from the input (high severity)
+[A-Z0-9]+  # matching a sequence of multiple valid characters
+Int        # built-in token for parsing and returning Integer values
+Word(3)    # built-in token Word, matching at least words of length 3
+</code></pre>
+<blockquote>
+<p>In terms of a compiler engineer, tokens in Tokay are the terminal symbols of a context-free grammar.</p>
+</blockquote>
+<h2 id="functions-and-parselets"><a class="header" href="#functions-and-parselets">Functions and parselets</a></h2>
+<p>Functions are sub-programs for a specific task or routine which can be used for multiple tasks. A function can accept arguments with default values.</p>
+<pre><code class="language-tokay"># function that doubles its value
+f : @x { x * 2 }
 f(9)  # 18
 
-@x{ x * 3 }(5)  # 15, returned by anonymous function that is called in-place
+# anonymous function example
+@x { x * 3 }(5)  # 15, returned by anonymous function that is called in-place
 </code></pre>
-<p>Objects are discussed in detail in a later chapter below.</p>
-<h2 id="captures-1"><a class="header" href="#captures-1">Captures</a></h2>
-<p>Items in sequences are captured during execution. They are temporarily pushed and hold onto a stack, for later access. It is possible to access previously captured items using <em>capture variables</em>. Capture variables start with a dollar-sign (<code>$</code>) followed either by an index, an aliased name or any Tokay expression which evalutes to an index or an aliased named dynamically.</p>
-<p>Given the expression</p>
-<pre><code class="language-tokay">first =&gt; Word  _  second =&gt; Word  _  third =&gt; Word
-</code></pre>
-<p>executed on the input</p>
-<pre><code>Save the planet
-</code></pre>
-<p>the sequence and input can be broken down into the following components.</p>
-<table>
-    <tr>
-        <td class="title">
-            Capture
-        </td>
-        <td>
-            $1
-        </td>
-        <td>
-            $2
-        </td>
-        <td>
-            $3
-        </td>
-        <td>
-            $4
-        </td>
-        <td>
-            $5
-        </td>
-    </tr>
-    <tr>
-        <td class="title">
-            Alias
-        </td>
-        <td>
-            $first
-        </td>
-        <td></td>
-        <td>
-            $second
-        </td>
-        <td></td>
-        <td>
-            $third
-        </td>
-    </tr>
-    <tr>
-        <td class="title">
-            Sequence
-        </td>
-        <td>
-            first => Word
-        </td>
-        <td>
-            _
-        </td>
-        <td>
-            second => Word
-        </td>
-        <td>
-            _
-        </td>
-        <td>
-            third => Word
-        </td>
-    </tr>
-    <tr>
-        <td class="title">
-            Input
-        </td>
-        <td>
-            "Save"
-        </td>
-        <td>
-            " "
-        </td>
-        <td>
-            "the"
-        </td>
-        <td>
-            " "
-        </td>
-        <td>
-            "Planet"
-        </td>
-    </tr>
-    <tr>
-        <td class="title">
-            $0 contains
-        </td>
-        <td>
-            "Save"
-        </td>
-        <td>
-            "Save "
-        </td>
-        <td>
-            "Save the"
-        </td>
-        <td>
-            "Save the "
-        </td>
-        <td>
-            "Save the planet"
-        </td>
-    </tr>
-</table>
-<p>As you can see, <code>$0</code> always contains the input matched so far from the start of the capture.</p>
-<p>Tokay also allows to assign values to captures. This makes it possible to directly use captures like any other variable inside of the sequence and any subsequent blocks that belong to the sequence.</p>
-<pre><code class="language-tokay"># planets2.tok
-Name {
-    if $1 == &quot;Earth&quot; {
-        $1 = &quot;Home&quot;
-    }
-    else if $1 == &quot;Mars&quot; || $1 == &quot;Venus&quot; {
-        $1 += &quot; (neighbour)&quot;
-    }
+<p>Parselets are more-specific functions consuming input and used for parsing. They are conceptionally the same, but also they are very distinguishable in their usage.</p>
+<pre><code># parselet that parses simple assignments to variables
+Assign : @{
+    variable =&gt; Ident _ '=' _ value =&gt; Number
 }
+
+# called on a given input `n = 42`...
+Assign
+# ... returns dict `(variable =&gt; &quot;n&quot;, value =&gt; 42)`
 </code></pre>
-<pre><code class="language-shell">$ tokay planets2.tok -- &quot;Mercury Venus Earth Mars Jupiter&quot;
-(&quot;Mercury&quot;, &quot;Venus (neighbour)&quot;, &quot;Home&quot;, &quot;Mars (neighbour)&quot;, &quot;Jupiter&quot;)
-</code></pre>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="objects"><a class="header" href="#objects">Objects</a></h1>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="tokens-1"><a class="header" href="#tokens-1">Tokens</a></h1>
+<blockquote>
+<p>In terms of a compiler engineer, parsing functions (in Tokay called &quot;parselets&quot;) are considered as non-terminal symbols of a context-free grammar.</p>
+</blockquote>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="tokens-2"><a class="header" href="#tokens-2">Tokens</a></h1>
 <p>Tokens are the fundamental building blocks used to process input. Tokay implements first-level tokens which direcly consume input, but usages of parselets, which are functions consuming input, are considered as second-level tokens, and are at least tokens as well.</p>
 <h2 id="touch--match"><a class="header" href="#touch--match">Touch &amp; match</a></h2>
 <p>To match exact strings of characters from the input, like keywords, the <em>match</em> and <em>touch</em> token-type is used. Touch was yet mostly used in our examples, but match is also useful, depending on use-case.</p>
@@ -798,6 +749,10 @@ Both type of matches can be referred by capture variables, therefore</p>
 [-+*/]        # Mathematical base operators (minus-dash first!)
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="parselets"><a class="header" href="#parselets">Parselets</a></h1>
+<blockquote>
+<p>Currently this chapter is an unfinished work-in-progress.</p>
+</blockquote>
+<p>Parselets are functions, which consume input.</p>
 <h2 id="begin-end"><a class="header" href="#begin-end">begin, end</a></h2>
 <p><em>coming soon</em></p>
 <h2 id="accept-reject"><a class="header" href="#accept-reject">accept, reject</a></h2>
@@ -1027,7 +982,7 @@ loop {
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="appendix-d-builtins"><a class="header" href="#appendix-d-builtins">Appendix D: Builtins</a></h1>
 <h2 id="functions-1"><a class="header" href="#functions-1">Functions</a></h2>
-<h2 id="tokens-2"><a class="header" href="#tokens-2">Tokens</a></h2>
+<h2 id="tokens-3"><a class="header" href="#tokens-3">Tokens</a></h2>
 <p>The following tokens are built into Tokay and can be used immediatelly. Programs can override these constants on-demand.</p>
 <table>
     <thead>
