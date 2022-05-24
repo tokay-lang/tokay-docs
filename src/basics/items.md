@@ -31,7 +31,7 @@ This is an assignment, and always produces the item value `void`, which means ju
 
 Here's another item:
 ```tokay
-if x > 100 "much" # conditional expression, which is either "more" or void
+if x > 100 "much" # conditional expression, which is either "much" or void
 ```
 
 This `if`-clause allows for conditional programming. It either produces a string when the provided condition is met, and otherwise also produces `void`.
