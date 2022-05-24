@@ -63,7 +63,8 @@ A list is a sequence of arbitrary values in a row. Therefore, a list can also co
 ```tokay
 # list of values
 (42, true, "yes")
-(42 true "yes")
+l = (42 true "yes")
+l.len()  # 3
 ```
 
 Lists can be concatenated by the `+`- and `+=`-operators, and provide the following methods:
@@ -81,7 +82,7 @@ Dictionaries ("dicts") are hash tables or maps with key-value-pairs, where a val
 # dictionary (dict), a map of key-value-pairs
 (i => 42, b => true, status => "success")
 d = (i => 42 b => true status => "success")
-d.push()
+d.update((x => 23.5))
 ```
 
 > Currently, as of Tokay v0.5 and below, Dicts in Tokay only support for strings as keys. This behavior is currently discussed and may change in a future version! This is also the reason for a lack of method implementations for dicts currently. See [#50](https://github.com/tokay-lang/tokay/issues/50) for details.
