@@ -9,7 +9,6 @@
 - [Concepts](./concepts/README.md)
   - [Terminology](./concepts/terminology.md)
   - [Values](./concepts/values.md)
-  - [Objects](./concepts/objects.md)
   - [Tokens](./concepts/tokens.md)
   - [Parselets](./concepts/parselets.md)
 - [Control structures](./control-structures.md)

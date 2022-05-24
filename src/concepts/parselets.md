@@ -1,5 +1,9 @@
 # Parselets
 
+> Currently this chapter is an unfinished work-in-progress.
+
+Parselets are functions, which consume input.
+
 ## begin, end
 
 *coming soon*
