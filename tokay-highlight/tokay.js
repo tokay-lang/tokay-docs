@@ -36,22 +36,22 @@ function hljs_tokay(hljs) {
     ];
 
     const BUILTINS = [
-        "Identifier",
-        "Integer",
+        "Char",
+        "Float",
+        "Ident",
+        "Int",
         "Name",
+        "Number",
         "Word",
-        "ast",
-        "ast_print",
-        "print",
     ];
 
     const TYPES = [
+        "bool",
         "dict",
         "list",
         "str",
         "int",
         "float",
-        "addr",
     ];
 
     return {
@@ -95,13 +95,6 @@ function hljs_tokay(hljs) {
                 className: "regexp",  // <-- this is only the css class used.
                 begin: '\'',
                 end: '\'',
-                illegal: '\\n',
-                contains: [hljs.BACKSLASH_ESCAPE]
-            },
-            {
-                className: "regexp",  // <-- this is only the css class used.
-                begin: '\\[',
-                end: '\\]',
                 illegal: '\\n',
                 contains: [hljs.BACKSLASH_ESCAPE]
             },

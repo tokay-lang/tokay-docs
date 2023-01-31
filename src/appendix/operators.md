@@ -2,6 +2,8 @@
 
 Tokay implements the following operators for use in expressions. The operators are ordered by precedence, operators in the same row share the same precedence.
 
+Don't confuse with some rows which look as redundant, this depends on either the operator is delimited by whitespace from its operands or not.
+
 <table>
     <thead>
         <tr class="title">
@@ -18,7 +20,7 @@ Tokay implements the following operators for use in expressions. The operators a
     </thead>
     <tbody>
         <tr>
-            <td>= += -= *= /=</td>
+            <td>=<br>+=<br>-=<br>*=<br>/=<br>//=<br>%=</td>
             <td>Assignment, combined operation-assignment</td>
             <td>left</td>
         </tr>
@@ -33,33 +35,38 @@ Tokay implements the following operators for use in expressions. The operators a
             <td>left</td>
         </tr>
         <tr>
-            <td>== != < <= >= ></td>
-            <td>Equal, unequal, Comparison</td>
+            <td>==<br>!=<br><<br><=<br>>=<br>></td>
+            <td>Equal, unequal, comparison</td>
             <td>left</td>
         </tr>
         <tr>
-            <td>+ -</td>
+            <td>+<br>-</td>
             <td>Add, subtract</td>
             <td>left</td>
         </tr>
         <tr>
-            <td>* /</td>
-            <td>Multiply, divide</td>
+            <td>*<br>/<br>//<br>%</td>
+            <td>Multiply, divide, integer divide, modulo</td>
             <td>left</td>
         </tr>
         <tr>
-            <td>- !</td>
+            <td>-<br>!</td>
             <td>Negate, not</td>
             <td>right</td>
         </tr>
         <tr>
-            <td>++ --</td>
+            <td>++<br>--</td>
             <td>Increment, decrement</td>
             <td>right</td>
         </tr>
         <tr>
-            <td>() [] .</td>
-            <td>Grouping, subscript, attribute</td>
+            <td>(...)</td>
+            <td>Inline sequence</td>
+            <td>left</td>
+        </tr>
+        <tr>
+            <td>(...)<br>[...]<br>.</td>
+            <td>Call parameters, subscript, attribute</td>
             <td>left</td>
         </tr>
     </tbody>

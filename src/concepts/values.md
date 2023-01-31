@@ -19,23 +19,21 @@ Using the builtin function `bool(v)`, a boolean value can be constructed from an
 Tokay supports `int` and `float` as numeric types.
 
 ```tokay
-42 -23         # signed 64-bit integer number object
+42 -23         # signed integer number object of arbitrary size (bigint)
 3.1415 -1.337  # signed 64-bit float number object
 ```
 
 For numbers, the following methods can be used:
 
-- `int(v)` contructs an int value from any other value `v`
-- `float(v)` contructs a float value from any other value `v`
+- `int(v)` - contructs an int value from any other value `v`
+- `float(v)` - contructs a float value from any other value `v`
 - `float.ceil()` - returns the next integer ceiling of a float
 - `float.fract()` - returns only the fractional part of a float
 - `float.trunc()` - truncates the fractional part off a float
 
-> As of Tokay v0.5, the internal implementation of numbers is unstable, and will be clarified in a future version. See [#52](https://github.com/tokay-lang/tokay/issues/52) for details.
-
 ## Strings
 
-A string ("str") is a unicode-character sequence of arbitrary length.
+A string (`str`) is a unicode-character sequence of arbitrary length.
 
 ```tokay
 s = "Tokay 🦎"
@@ -43,7 +41,10 @@ s = s + " is cool"
 s += "!"
 ```
 
-Str objects can be concatenated by the `+`- and `+=`-operators, multiplied by the `*`- and `*=`-operators and provide the following methods:
+`str` objects can be concatenated by the operators `+` and `+=`.<br>
+They can also be multiplied by the operators `*` and `*=`.
+
+Additionally, they provide the following methods:
 
 - `str(v)` - constructs a string object from any other value `v`
 - `str.byteslen()` - return total length of bytes used by the string
@@ -64,12 +65,15 @@ A list is a sequence of arbitrary values in a row. Therefore, a list can also co
 # list of values
 (42, true, "yes")
 l = (42 true "yes")
-l.len()  # 3
+l[1] = false
+l.push("🦎")
+l.len()  # 4
 ```
 
 Lists can be concatenated by the `+`- and `+=`-operators, and provide the following methods:
 
 - `list(*args)` - constructs a new list from all arguments provided
+- `list.flatten()` - integrates items of lists inside a list into itself
 - `list.len()` - returns number of items in the list
 - `list.push(item, index=void)` - either appends an `item` to the list or inserts it at position `index`
 - `list.pop(index=void)` - either pops the last item off the list or removes and returns item at position `index`
@@ -80,32 +84,37 @@ Dictionaries ("dicts") are hash tables or maps with key-value-pairs, where a val
 
 ```tokay
 # dictionary (dict), a map of key-value-pairs
-(i => 42, b => true, status => "success")
-d = (i => 42 b => true status => "success")
-d.update((x => 23.5))
+(i => 42, b => true, status => "success", true => false)
+d = (i => 42 b => true status => "success" true => false)
+d["angle"] = 23.5  # add key "angle"
+d["i"] = void  # remove key "i"
 ```
 
-> Currently, as of Tokay v0.5 and below, Dicts in Tokay only support for strings as keys. This behavior is currently discussed and may change in a future version! This is also the reason for a lack of method implementations for dicts currently. See [#50](https://github.com/tokay-lang/tokay/issues/50) for details.
-
-In Tokay v0.5, dicts provide the following methods:
+Dicts provide the following methods:
 
 - `dict()` - creates a new, empty dict
+- `dict_clone()` - create an independ copy of dict
+- `dict_items()` - returns a list of lists (key, value)
+- `dict_keys()` - returns a list of keys
 - `dict.len()` - returns number of items in the dict
-- `dict.update(other)` - merges two dicts
+- `dict.merge(other)` - merges antoher dict into the dict
+- `dict_pop(k=void, d=void)` - remove and return k from dict; returns d when key is not present; when k is not present, the last item will be removed.
+- `dict_push(k, v)` - insert v as key k into dict
+- `dict_values()` - returns a list of values
 
 ## Tokens
 
 Tokens are callables consuming input from the stream. They are object values as well. They always return a value parsed from the input stream in case the token matches. Otherwise, tokens usually reject the current block branch or parselet, to try other alternatives.
 
 ```tokay
-'touch'    # silently touch a string in the input (low severity)
-''match''  # verbosely match a string from the input (high severity)
-[A-Z0-9]+  # matching a sequence of multiple valid characters
-Int        # built-in token for parsing and returning Integer values
-Word(3)    # built-in token Word, matching at least words of length 3
+'touch'        # silently touch a string in the input (low severity)
+''match''      # verbosely match a string from the input (high severity)
+Char<A-Z0-9>+  # matching a sequence of multiple valid characters
+Int            # built-in token for parsing and returning Integer values
+Word(3)        # built-in token Word, matching at least words of length 3
 ```
 
-> In terms of a compiler engineer, tokens in Tokay are the terminal symbols of a context-free grammar.
+> In terms of parsing, tokens are the terminal symbols of a context-free grammar.
 
 ## Functions and parselets
 
@@ -133,4 +142,4 @@ Assign
 # ... returns dict `(variable => "n", value => 42)`
 ```
 
-> In terms of a compiler engineer, parsing functions (in Tokay called "parselets") are considered as non-terminal symbols of a context-free grammar.
+> In terms of parsing, parselets are considered as non-terminal symbols of a context-free grammar.

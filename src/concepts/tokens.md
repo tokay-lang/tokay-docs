@@ -2,7 +2,7 @@
 
 Tokens are the fundamental building blocks used to process input. Tokay implements first-level tokens which direcly consume input, but usages of parselets, which are functions consuming input, are considered as second-level tokens, and are at least tokens as well.
 
-## Touch & match
+## `'touch'` and `''match''`
 
 To match exact strings of characters from the input, like keywords, the *match* and *touch* token-type is used. Touch was yet mostly used in our examples, but match is also useful, depending on use-case.
 
@@ -24,22 +24,34 @@ Check out the following one-liner when executed on the input `1+2-3+4`, it will 
 E : { E ''+'' E ; E '-' E; Integer }; E
 ```
 
-## Character-classes
+## `Char`
 
-Character tokens are expressed as character-classes known from regular expressions. They are encapsulated in brackets `[...]` and allow for a specification of ranges or single characters.
+To match a character, the `Char`-token is both builtin and part of Tokay's syntax.
 
-- Single Characters are either specified by a Unicode-character or an escape sequence
-- Ranges are delimited by a dash (`-`). If a Max-Min-Range is specified, it is automatically converted into a Min-Max-Range, so `[z-a]` becomes `[a-z]`.
+- Single characters are either specified by a Unicode-character or an escape sequence
+- Ranges are delimited by a dash (`-`). If a Max-Min-Range is specified, it is automatically converted into a Min-Max-Range, so `Char<z-a>` is equal to `Char<a-z>`.
 - If a dash (`-`) should be part of the character-class, it should be specified first or last.
-- If a circumflex (`^`) is specified as first character in the character-class, the character-class will be inverted, so `[^a-z]` matches everything except `a` to `z`.
-
+- If a circumflex (`^`) is specified as first character in the character-class, the character-class will be inverted, so `Char<^a-z>` matches everything except `a` to `z`.
 
 ```tokay
-[a]           # just "a"
-[az]          # either "a" or "z"
-[abc]         # "a", "b" or "c"
-[a-c]         # "a", "b" or "c" also
-[a-zA-Z0-9_]  # All ASCII digit or letter and underscore
-[^0-9]        # Any character except ASCII digits
-[-+*/]        # Mathematical base operators (minus-dash first!)
+Char              # any character
+Char<a>           # just "a"
+Char<az>          # either "a" or "z"
+Char<a-z>         # any character from "a" to "z"
+Char<a-zA-Z0-9_>  # All ASCII digit or letter and underscore
+Char<^0-9>        # Any character except ASCII digits
+Char<-+*/>        # Mathematical base operators (minus-dash first!)
 ```
+
+> When using the `Char`-token with the multiplicative operators `+` (many repetition) or `*` (kleene, none or many), they are internally revised to a `Chars`-version, for better performance.
+
+## Builtin tokens
+
+The following tokens are builtin and can be parametrized.
+
+- `Ident` - parses any C-style idenfifier name
+- `Int(base=10, with_signs=true)` - parses an int-value to the provided base, optionally with `+` or `-` signs
+- `Float(with_signs=true)` - parses a float-value, optionally with `+` or `-` signs
+- `Number` - parses `Float` or `Int`
+- `Token` - either parses `Number`, `Word` or `AsciiPunctuation`
+- `Word(min=1, max=void)` - parses any word, number, etc. with the specified `min`- and `max`-length

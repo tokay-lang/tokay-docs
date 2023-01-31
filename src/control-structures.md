@@ -88,3 +88,5 @@ for count = 10; count >= 0; count-- {
     print(i)
 }
 ```
+
+> This syntax is abandoned. The upcoming version 0.7 of Tokay will only support `for...in`.

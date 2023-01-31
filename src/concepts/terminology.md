@@ -1,14 +1,16 @@
 # Terminology
 
-## Identifiers
+First of all, there are some terms which are oftenly used in Tokay.
 
-Naming rules for identifiers in Tokay differ to other programming languages, and this is an essential feature.
+## Names and identifiers
 
-1. As known from other languages, identifiers may not start with any digit (`0-9`).
-2. Variables need to start with a lower-case letter from (`a-z`)
-3. Constants need to start either
-   - with an upper-case letter (`A-Z`) or an underscore (`_`) when they refer consumable values,
-   - otherwise they can also start with a lower-case letter from (`a-z`).
+The naming rules for identifiers in Tokay differ to other programming languages, and this is an essential feature.
+
+1. Any identifier may not start with any digit (`Char<0-9>`).
+2. Variable names have to start with any lower-case letter (`Char<a-z>`)
+3. Constant names have to start either
+   - when they refer consumable values, with an upper-case letter or an underscore<br>(`Char<A-Z_>`)
+   - otherwise they can also start with a lower-case letter, likewise variable names<br>(`Char<a-z>`).
 
 Some examples for better understanding:
 ```tokay
@@ -16,52 +18,80 @@ Some examples for better understanding:
 pi : 3.1415
 mul2 : @x { x * 2 }
 Planet : @{ 'Venus' ; 'Earth'; 'Mars' }
-the_Tribe = "Apache"
+the_Tribe = "Cherokee"
 
 # Invalid
 Pi : 3.1415  # float value is not consumable
 planet : @{ 'Venus' ; 'Earth'; 'Mars' }  # identifier must specify consumable
 The_Tribe = "Cherokee"  # Upper-case variable name not allowed
 
-9th = 9  # interpreted as '9 th = 9'
+9th = 9  # valid, but is interpreted as sequence `9 th = 9`
 ```
 
-More about *consumable* and *non-consumable* values, *variables* and *constants* will be discussed later.
+More about *consumable* and *non-consumable* values, *variables* and *constants* is discussed shortly.
 
 ## Variables and constants
 
 Symbolic identifiers for named values can either be defined as *variables* or *constants*.
+
 ```tokay
 variable = 0  # assign 0 to a variable
 constant : 0  # assign 0 to a constant
 ```
+
 Obviously, this looks like the same. `variable` becomes 0 and `constant` also. Let's try to modify these values afterwards.
+
 ```tokay
 variable += 1  # increment variable by 1
-constant += 1  # throws compile error: Cannot assign to constant 'constant'
+constant += 1  # throws compiler error: Cannot assign to constant 'constant'
 ```
+
 Now `variable` becomes 1, but `constant` can't be assigned and Tokay throws a compile error.
 What you can do is to redefine the constant with a new value.
+
 ```tokay
 variable++    # increment variable by 1
 constant : 1  # re-assign constant to 1
 ```
-The reason is, that variables are evaluated at runtime, whereas constants are evaluated at compile-time, before the program is being executed.
+
+The reason is, that *variables* are evaluated at runtime, whereas *constants* are evaluated at compile-time, before the program is being executed.
 
 The distinction between variables and constants is a tradeoff between flexibility and predictivity to make different concepts behind Tokay possible. The values of variables aren't known at compile-time, therefore predictive construction of code depending on the values used is not possible. On the other hand, constants can be used before their definition, which is very useful when thinking of functions being called by other functions before their definition.
 
 ## Callables and consumables
 
-From the object types presented above, tokens and functions have the special properties that they are *callable* and possibly *consumable*.
+Some values are callable. Generally, all tokens, functions and builtins are *callable*.
 
-- Tokens are always callable and considered to consume input
-- Functions are always callable and are named
-    - *parselets* when they consume input by either using tokens or a consumable constant
-    - *functions* when they don't consume any input
+Here are some usages of callables:
+```tokay
+int("123")        # Builtin int constructor
+Int               # Builtin Int parser token
+Char<A-Z>         # builtin char token
+'Check'           # Touch token 'Check'
+''Bold''          # Match token 'Bold'
 
-For variables and constants, special naming rules apply which allow Tokay to determine a symbol type based on its identifier only.
+s = "Hello"
+s.upper           # calls method 'str_upper', returns "HELLO"
+s[0]              # Internally call 'str_get_item', returns "H"
 
-*todo: This section is a stub. More examples and detailed explanations needed here.*
+f : @x { x * 2 }  # function definition
+f(42)             # function call, producing 84
+```
+
+Additionally, a callable can be attributed to be *consumable*. This is the case when the callable either makes use of another consumable callable, or it direcly consumes input. Consumables are always identified by either starting with an upper-case letter or an underscore. A function which makes use of a consumable is called *parselet*.
+
+```tokay
+# invalid attempt; the parselet makes use of consumables,
+# but is assigned to a name for a non-consumable constant.
+assign : @{
+    Ident _ expect '=' _ expect Expr
+}
+
+# creating a parselet
+Assign : @{
+    Ident _ expect '=' _ expect Expr
+}
+```
 
 ## Scopes
 
