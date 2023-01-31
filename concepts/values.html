@@ -8,7 +8,6 @@
 
         <!-- Custom HTML head -->
         
-        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff" />
@@ -34,13 +33,13 @@
     </head>
     <body>
         <!-- Provide site root to javascript -->
-        <script type="text/javascript">
+        <script>
             var path_to_root = "../";
             var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
         </script>
 
         <!-- Work around some values being stored in localStorage wrapped in quotes -->
-        <script type="text/javascript">
+        <script>
             try {
                 var theme = localStorage.getItem('mdbook-theme');
                 var sidebar = localStorage.getItem('mdbook-sidebar');
@@ -56,7 +55,7 @@
         </script>
 
         <!-- Set the theme before any content is loaded, prevents flash -->
-        <script type="text/javascript">
+        <script>
             var theme;
             try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
             if (theme === null || theme === undefined) { theme = default_theme; }
@@ -68,7 +67,7 @@
         </script>
 
         <!-- Hide / unhide sidebar before it is displayed -->
-        <script type="text/javascript">
+        <script>
             var html = document.querySelector('html');
             var sidebar = 'hidden';
             if (document.body.clientWidth >= 1080) {
@@ -99,7 +98,7 @@
                             <i class="fa fa-paint-brush"></i>
                         </button>
                         <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
-                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
@@ -132,7 +131,7 @@
                 </div>
 
                 <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
-                <script type="text/javascript">
+                <script>
                     document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
                     document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
                     Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
@@ -153,27 +152,26 @@ true false     # boolean values
 <p>Using the builtin function <code>bool(v)</code>, a boolean value can be constructed from any other value <code>v</code>, by testing for truth.</p>
 <h2 id="numbers"><a class="header" href="#numbers">Numbers</a></h2>
 <p>Tokay supports <code>int</code> and <code>float</code> as numeric types.</p>
-<pre><code class="language-tokay">42 -23         # signed 64-bit integer number object
+<pre><code class="language-tokay">42 -23         # signed integer number object of arbitrary size (bigint)
 3.1415 -1.337  # signed 64-bit float number object
 </code></pre>
 <p>For numbers, the following methods can be used:</p>
 <ul>
-<li><code>int(v)</code> contructs an int value from any other value <code>v</code></li>
-<li><code>float(v)</code> contructs a float value from any other value <code>v</code></li>
+<li><code>int(v)</code> - contructs an int value from any other value <code>v</code></li>
+<li><code>float(v)</code> - contructs a float value from any other value <code>v</code></li>
 <li><code>float.ceil()</code> - returns the next integer ceiling of a float</li>
 <li><code>float.fract()</code> - returns only the fractional part of a float</li>
 <li><code>float.trunc()</code> - truncates the fractional part off a float</li>
 </ul>
-<blockquote>
-<p>As of Tokay v0.5, the internal implementation of numbers is unstable, and will be clarified in a future version. See <a href="https://github.com/tokay-lang/tokay/issues/52">#52</a> for details.</p>
-</blockquote>
 <h2 id="strings"><a class="header" href="#strings">Strings</a></h2>
-<p>A string (&quot;str&quot;) is a unicode-character sequence of arbitrary length.</p>
+<p>A string (<code>str</code>) is a unicode-character sequence of arbitrary length.</p>
 <pre><code class="language-tokay">s = &quot;Tokay 🦎&quot;
 s = s + &quot; is cool&quot;
 s += &quot;!&quot;
 </code></pre>
-<p>Str objects can be concatenated by the <code>+</code>- and <code>+=</code>-operators, multiplied by the <code>*</code>- and <code>*=</code>-operators and provide the following methods:</p>
+<p><code>str</code> objects can be concatenated by the operators <code>+</code> and <code>+=</code>.<br>
+They can also be multiplied by the operators <code>*</code> and <code>*=</code>.</p>
+<p>Additionally, they provide the following methods:</p>
 <ul>
 <li><code>str(v)</code> - constructs a string object from any other value <code>v</code></li>
 <li><code>str.byteslen()</code> - return total length of bytes used by the string</li>
@@ -191,11 +189,14 @@ s += &quot;!&quot;
 <pre><code class="language-tokay"># list of values
 (42, true, &quot;yes&quot;)
 l = (42 true &quot;yes&quot;)
-l.len()  # 3
+l[1] = false
+l.push(&quot;🦎&quot;)
+l.len()  # 4
 </code></pre>
 <p>Lists can be concatenated by the <code>+</code>- and <code>+=</code>-operators, and provide the following methods:</p>
 <ul>
 <li><code>list(*args)</code> - constructs a new list from all arguments provided</li>
+<li><code>list.flatten()</code> - integrates items of lists inside a list into itself</li>
 <li><code>list.len()</code> - returns number of items in the list</li>
 <li><code>list.push(item, index=void)</code> - either appends an <code>item</code> to the list or inserts it at position <code>index</code></li>
 <li><code>list.pop(index=void)</code> - either pops the last item off the list or removes and returns item at position <code>index</code></li>
@@ -203,29 +204,33 @@ l.len()  # 3
 <h2 id="dicts"><a class="header" href="#dicts">Dicts</a></h2>
 <p>Dictionaries (&quot;dicts&quot;) are hash tables or maps with key-value-pairs, where a value is referenced by using the key as its storage location.</p>
 <pre><code class="language-tokay"># dictionary (dict), a map of key-value-pairs
-(i =&gt; 42, b =&gt; true, status =&gt; &quot;success&quot;)
-d = (i =&gt; 42 b =&gt; true status =&gt; &quot;success&quot;)
-d.update((x =&gt; 23.5))
+(i =&gt; 42, b =&gt; true, status =&gt; &quot;success&quot;, true =&gt; false)
+d = (i =&gt; 42 b =&gt; true status =&gt; &quot;success&quot; true =&gt; false)
+d[&quot;angle&quot;] = 23.5  # add key &quot;angle&quot;
+d[&quot;i&quot;] = void  # remove key &quot;i&quot;
 </code></pre>
-<blockquote>
-<p>Currently, as of Tokay v0.5 and below, Dicts in Tokay only support for strings as keys. This behavior is currently discussed and may change in a future version! This is also the reason for a lack of method implementations for dicts currently. See <a href="https://github.com/tokay-lang/tokay/issues/50">#50</a> for details.</p>
-</blockquote>
-<p>In Tokay v0.5, dicts provide the following methods:</p>
+<p>Dicts provide the following methods:</p>
 <ul>
 <li><code>dict()</code> - creates a new, empty dict</li>
+<li><code>dict_clone()</code> - create an independ copy of dict</li>
+<li><code>dict_items()</code> - returns a list of lists (key, value)</li>
+<li><code>dict_keys()</code> - returns a list of keys</li>
 <li><code>dict.len()</code> - returns number of items in the dict</li>
-<li><code>dict.update(other)</code> - merges two dicts</li>
+<li><code>dict.merge(other)</code> - merges antoher dict into the dict</li>
+<li><code>dict_pop(k=void, d=void)</code> - remove and return k from dict; returns d when key is not present; when k is not present, the last item will be removed.</li>
+<li><code>dict_push(k, v)</code> - insert v as key k into dict</li>
+<li><code>dict_values()</code> - returns a list of values</li>
 </ul>
 <h2 id="tokens"><a class="header" href="#tokens">Tokens</a></h2>
 <p>Tokens are callables consuming input from the stream. They are object values as well. They always return a value parsed from the input stream in case the token matches. Otherwise, tokens usually reject the current block branch or parselet, to try other alternatives.</p>
-<pre><code class="language-tokay">'touch'    # silently touch a string in the input (low severity)
-''match''  # verbosely match a string from the input (high severity)
-[A-Z0-9]+  # matching a sequence of multiple valid characters
-Int        # built-in token for parsing and returning Integer values
-Word(3)    # built-in token Word, matching at least words of length 3
+<pre><code class="language-tokay">'touch'        # silently touch a string in the input (low severity)
+''match''      # verbosely match a string from the input (high severity)
+Char&lt;A-Z0-9&gt;+  # matching a sequence of multiple valid characters
+Int            # built-in token for parsing and returning Integer values
+Word(3)        # built-in token Word, matching at least words of length 3
 </code></pre>
 <blockquote>
-<p>In terms of a compiler engineer, tokens in Tokay are the terminal symbols of a context-free grammar.</p>
+<p>In terms of parsing, tokens are the terminal symbols of a context-free grammar.</p>
 </blockquote>
 <h2 id="functions-and-parselets"><a class="header" href="#functions-and-parselets">Functions and parselets</a></h2>
 <p>Functions are sub-programs for a specific task or routine which can be used for multiple tasks. A function can accept arguments with default values.</p>
@@ -247,7 +252,7 @@ Assign
 # ... returns dict `(variable =&gt; &quot;n&quot;, value =&gt; 42)`
 </code></pre>
 <blockquote>
-<p>In terms of a compiler engineer, parsing functions (in Tokay called &quot;parselets&quot;) are considered as non-terminal symbols of a context-free grammar.</p>
+<p>In terms of parsing, parselets are considered as non-terminal symbols of a context-free grammar.</p>
 </blockquote>
 
                     </main>
@@ -282,18 +287,18 @@ Assign
 
 
 
-        <script type="text/javascript">
+        <script>
             window.playground_copyable = true;
         </script>
 
 
-        <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
 
-        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
-        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
 
         <!-- Custom JS scripts -->
 

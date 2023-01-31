@@ -9,7 +9,6 @@
 
         <!-- Custom HTML head -->
         
-        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff" />
@@ -35,13 +34,13 @@
     </head>
     <body>
         <!-- Provide site root to javascript -->
-        <script type="text/javascript">
+        <script>
             var path_to_root = "";
             var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
         </script>
 
         <!-- Work around some values being stored in localStorage wrapped in quotes -->
-        <script type="text/javascript">
+        <script>
             try {
                 var theme = localStorage.getItem('mdbook-theme');
                 var sidebar = localStorage.getItem('mdbook-sidebar');
@@ -57,7 +56,7 @@
         </script>
 
         <!-- Set the theme before any content is loaded, prevents flash -->
-        <script type="text/javascript">
+        <script>
             var theme;
             try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
             if (theme === null || theme === undefined) { theme = default_theme; }
@@ -69,7 +68,7 @@
         </script>
 
         <!-- Hide / unhide sidebar before it is displayed -->
-        <script type="text/javascript">
+        <script>
             var html = document.querySelector('html');
             var sidebar = 'hidden';
             if (document.body.clientWidth >= 1080) {
@@ -100,7 +99,7 @@
                             <i class="fa fa-paint-brush"></i>
                         </button>
                         <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
-                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
@@ -133,7 +132,7 @@
                 </div>
 
                 <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
-                <script type="text/javascript">
+                <script>
                     document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
                     document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
                     Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
@@ -145,8 +144,13 @@
                     <main>
                         <h1 id="preface"><a class="header" href="#preface">Preface</a></h1>
 <blockquote>
-<p>The Tokay documentation is currently under heavy development and unfinished.
-Feel free to contribute! To do so, visit <a href="https://github.com/tokay-lang">https://github.com/tokay-lang</a>.</p>
+<p>This documentation was updated to be used with <a href="https://tokay.dev/news/release-v0-6/">Tokay 0.6</a>.<br>
+Some features might not work as expected when used with a more recent version.</p>
+</blockquote>
+<blockquote>
+<p>Likewise Tokay itself, this documentation is currently under development and unfinished.<br>
+If you found any mistakes or can explain things better, please contribute!<br>
+To do so, visit <a href="https://github.com/tokay-lang">https://github.com/tokay-lang</a>.</p>
 </blockquote>
 <p>Tokay is a programming language designed for ad-hoc parsing and text processing. Tokay programs operate directly on input streams that are read from files, strings, piped commands or any other device emitting characters.</p>
 <p>The following example is a short Tokay program that illustrates how Tokay works. It recognizes either &quot;Hello Mercury&quot;, &quot;Hello Venus&quot; or &quot;Hello Earth&quot; from a text stream. Any other input is automatically skipped.</p>
@@ -157,86 +161,156 @@ Feel free to contribute! To do so, visit <a href="https://github.com/tokay-lang"
 }
 </code></pre>
 <p>Unlike general purpose programming languages like Rust or Python, in Tokay no explicit branching, substring extraction, or reading from input is required. Instead, these operations are directly built into the language.</p>
-<p>If you're familiar with <a href="https://en.wikipedia.org/wiki/AWK">awk</a>, you might find the syntax in the previous example to be similar to awk's <code>PATTERN { action }</code> syntax. This approach is recursive in Tokay, so that the action-part can also be treated as a pattern, or as plain action code. This highlights a core tenet of Tokay's design and its key difference from awk: instead of using a line-based execution model, Tokay takes a token-based approach that permits operating on anything matched from the input. This enables Tokay programs to operate on recursive structures that can be expressed by a grammar.</p>
+<p>If you're familiar with <a href="https://en.wikipedia.org/wiki/AWK">AWK</a>, you might find the syntax in the previous example to be similar to the <code>PATTERN { action }</code> syntax. This approach is recursive in Tokay, so that the action-part can also be treated as a pattern, or as plain action code. This highlights a core tenet of Tokay's design and its key difference from AWK: instead of using a line-based execution model, Tokay takes a token-based approach that permits operating on anything matched from the input. This enables Tokay programs to operate on recursive structures that can be expressed by a grammar.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="getting-started"><a class="header" href="#getting-started">Getting started</a></h1>
 <h2 id="installation"><a class="header" href="#installation">Installation</a></h2>
 <p>Currently, Tokay is in a very early project state. Therefore you have to built it from source, using the <a href="https://www.rust-lang.org/">Rust</a> programming language and its build-tool <code>cargo</code>.</p>
-<p>Once you got Rust installed, install <a href="https://crates.io/crates/tokay">Tokay</a> with <code>cargo install tokay</code>.</p>
-<p>When this is done, you can run Tokay directly, like so, to start a REPL:</p>
+<p>Once you got Rust installed, install <a href="https://crates.io/crates/tokay">Tokay</a> by</p>
+<pre><code class="language-bash">$ cargo install tokay
+</code></pre>
+<p>Once done, you should run the Tokay REPL with</p>
 <pre><code class="language-bash">$ tokay
-Tokay 0.4.0
+Tokay 0.6.0
 &gt;&gt;&gt; print(&quot;Hello Tokay&quot;)
 Hello Tokay
 &gt;&gt;&gt;
 </code></pre>
-<p>To exit the REPL, type <code>exit</code> or press <code>Ctrl+C</code>.</p>
-<h2 id="using-the-tokay-command"><a class="header" href="#using-the-tokay-command">Using the <code>tokay</code> command</a></h2>
+<p>You can exit the Tokay REPL with <code>Ctrl+C</code>.</p>
+<blockquote>
+<p>The next examples are showing the REPL-prompt <code>&gt;&gt;&gt;</code> with a given input and output. The output may differ when other input is provided.</p>
+</blockquote>
+<h2 id="usage"><a class="header" href="#usage">Usage</a></h2>
 <p>Invoking the <code>tokay</code> command without any arguments starts the REPL (read-eval-print-loop). This allows to enter expressions or even full programs interactively with a direct result.</p>
-<p>Start a REPL</p>
-<pre><code class="language-bash">$ tokay
-Tokay 0.4.0
-&gt;&gt;&gt; 23 * 5
-115
-&gt;&gt;&gt; for i=0; i &lt; 10; i++ print(i)
-0
-1
-2
-3
-4
-5
-6
-7
-8
-9
-&gt;&gt;&gt;
-</code></pre>
-<p>Start a REPL working on an input stream read from <code>file.txt</code>:</p>
-<pre><code class="language-bash">$ tokay -- file.txt
-</code></pre>
-<p>Start a REPL working on the input string &quot;save all the whales&quot;:</p>
-<pre><code class="language-bash">$ tokay -- &quot;save all the whales&quot;
-Tokay 0.4.0
-&gt;&gt;&gt; Word
-(&quot;save&quot;, &quot;all&quot;, &quot;the&quot;, &quot;whales&quot;)
+<pre><code class="language-bash"># Start a repl
+$ tokay
+
+# Start a repl working on an input stream from file.txt
+$ tokay -- file.txt
+
+# Start a repl working on the input string &quot;gliding is flying with the clouds&quot;
+$ tokay -- &quot;gliding is flying with the clouds&quot;
+Tokay 0.6.0
+&gt;&gt;&gt; Word(5)
+(&quot;gliding&quot;, &quot;flying&quot;, &quot;clouds&quot;)
 &gt;&gt;&gt;
 </code></pre>
 <blockquote>
-<p>In case you compile and run Tokay from the source code of the Git repository on your own, just run <code>cargo run --</code> with any desired parameters attached.</p>
+<p>In case you compile and run Tokay from source, use <code>cargo run --</code> with any desired parameters here, instead of the <code>tokay</code> command.</p>
 </blockquote>
-<p>Next runs the Tokay program from the file <em>prog.tok</em>:</p>
-<pre><code class="language-bash">$ tokay prog.tok
-...
+<p>Next runs the Tokay program from the file <em>program.tok</em>:</p>
+<pre><code class="language-bash"># Run a program from a file
+$ tokay program.tok
 </code></pre>
 <p>To directly work on files as input stream, do this as shown next. Further files can be specified and are executed on the same program sequentially. Its also possible to read from stdin using the special filename <code>-</code>.</p>
-<p>Run a program from a file with another file as input stream</p>
-<pre><code class="language-bash">$ tokay prog.tok -- file.txt
-...
+<pre><code class="language-bash"># Run a program from a file with another file as input stream
+$ tokay program.tok -- file.txt
+
+# Run a program from with multiple files as input stream
+$ tokay program.tok -- file1.txt file2.txt file3.txt
+
+# Run a program from with files or strings as input stream
+$ tokay program.tok -- file1.txt &quot;gliding is fun&quot; file2.txt
+
+# Pipe input through tokay
+$ cat file.txt | tokay program.tok -- -
 </code></pre>
-<p>Run a program from with multiple files as input stream</p>
-<pre><code class="language-bash">$ tokay prog.tok -- file1.txt file2.txt file3.txt
-...
+<p>A Tokay program can also be specified directly as first parameter. This call just prints the content of the files specified:</p>
+<pre><code class="language-bash"># Directly provide program via command-line parameter
+$ tokay 'print(Char+)' -- file.txt
 </code></pre>
-<p>Run a program from with files or strings as input stream</p>
-<pre><code class="language-bash">$ tokay prog.tok -- file1.txt &quot;save all the whales&quot; file2.txt
-...
-</code></pre>
-<p>Pipe input through tokay</p>
-<pre><code class="language-bash">$ cat file.txt | tokay prog.tok -- -
-...
-</code></pre>
-<p>A Tokay program can also be specified directly by parameter. This call just prints the content of the files specified:</p>
-<pre><code class="language-shell">$ tokay '.+' -- file1.txt file2.txt file3.txt
-file1.txt: ...
-file2.txt: ...
-file3.txt: ...
-</code></pre>
+<blockquote>
+<p><code>tokay --help</code> will give you an overview about further parameters and invocation.</p>
+</blockquote>
 <h2 id="first-steps"><a class="header" href="#first-steps">First steps</a></h2>
-<p>Next you can see some little programs expressed in Tokay to become familiar with the syntax and behavior.</p>
-<h3 id="hello-tokay"><a class="header" href="#hello-tokay">Hello Tokay</a></h3>
-<p>You probably found out how to express the &quot;Hello World&quot; program in Tokay already.</p>
-<pre><code class="language-tokay">print(&quot;Hello World&quot;)
+<p>Tokay programs are made of <em>items</em>, <em>sequences</em> and <em>blocks</em>.</p>
+<h3 id="items"><a class="header" href="#items">Items</a></h3>
+<p>An item can be an expression, a function or token call or a statement. The following are all items.</p>
+<pre><code class="language-tokay"># Expression
+&gt;&gt;&gt; 2 + 3 * 5
+17
+
+# Assignment of an expression to a variable
+&gt;&gt;&gt; i = 2 + 3 * 5
+
+# Using a variable within an expression
+&gt;&gt;&gt; i + 3
+20
+
+# Conditional if-statement
+&gt;&gt;&gt; if i == 17 &quot;yes&quot; else &quot;no&quot;
+&quot;yes&quot;
+
+# Function call
+&gt;&gt;&gt; print(&quot;hello&quot; + i)
+hello17
+
+# Method call
+&gt;&gt;&gt; &quot;hello&quot;.upper * 3
+&quot;HELLOHELLOHELLO&quot;
+
+# Token call (&quot;hello&quot; is read by Word(3) from the input stream)
+&gt;&gt;&gt; Word(3)
+&quot;hello&quot;
+
+# Token call in an expression (42 is read by Int from the input stream)
+&gt;&gt;&gt; Int * 3
+126
 </code></pre>
-<h3 id="tokens"><a class="header" href="#tokens">Tokens</a></h3>
+<h3 id="sequences"><a class="header" href="#sequences">Sequences</a></h3>
+<p>Sequences are multiple items in a row. Items in a sequence can optionally be separated by commas, but this is not mandatory. Sequences are either delimited by line-break, or a semicolon (<code>;</code>).</p>
+<pre><code class="language-tokay"># A sequence of items with the same weighting result in a list
+&gt;&gt;&gt; 1 2 3
+(1, 2, 3)
+
+# This works also comma-separated
+&gt;&gt;&gt; 1, 2, 3
+(1, 2, 3)
+
+# This is a sequence of lists (indeed, lists are sequences, too)
+&gt;&gt;&gt; (1 2 3) (4 5 6)
+((1, 2, 3), (4, 5, 6))
+
+# Two sequences in one row; only last result is printed in REPL.
+&gt;&gt;&gt; (1 2 3); (4 5 6)
+(4, 5, 6)
+
+# This is a simple parsing sequence, accepting  assignments like
+# &quot;i=1&quot; or &quot;number = 123&quot;
+&gt;&gt;&gt; Ident _ '=' _ Int
+(&quot;number&quot;, 123)
+
+# This is a version of the same sequence constructing a dictionary
+# rather than a list
+&gt;&gt;&gt; name =&gt; Ident _ '=' _ value =&gt; Int
+(name =&gt; &quot;number&quot;, value =&gt; 123)
+</code></pre>
+<h3 id="blocks"><a class="header" href="#blocks">Blocks</a></h3>
+<p>Finally, sequences are organized in blocks. The execution of a sequence is influenced by failing token matches or special keywords (like <code>push</code>, <code>next</code> or <code>accept</code>, <code>reject</code>, etc.), which either enforce to execute the next sequence, or accept or reject a parselet, which can be referred to as a function. The main-parselet is also a parselet executing the main block, where the REPL runs in.</p>
+<p>A block itself is also an item inside of a sequence of another block (or the main block). A new block is defined by <code>{</code> and <code>}</code>.</p>
+<p>The next piece of code is already a demonstration of Tokays parsing features together with a parselet and two blocks, implementing an assignment grammar for either float or integer values, and some error reporting.</p>
+<pre><code class="language-tokay"># Parselet definition of Assignment (identified by the @{...}-block)
+# Match an identifier, followed by either a float or an integer;
+# Throws an error on mismatch.
+&gt;&gt;&gt; Assignment : @{
+    Ident _ '=' _ {
+        Float
+        Int
+        error(&quot;Expecting a number here&quot;)
+    }
+}
+
+# Given input &quot;i = 23.5&quot;
+&gt;&gt;&gt; Assignment
+(&quot;i&quot;, 23.5)
+
+# Given input &quot;i = 42&quot;
+&gt;&gt;&gt; Assignment
+(&quot;i&quot;, 42)
+
+# Given input &quot;i = j&quot;
+&gt;&gt;&gt; Assignment
+Line 1, column 5: Expecting a number here
+</code></pre>
 <h3 id="writing-comments"><a class="header" href="#writing-comments">Writing comments</a></h3>
 <p>It is good practise to document source code and what's going on using comments. Likewise bash, Python or awk, Tokay supports line-comments starting with a hash (<code>#</code>). The rest of the line will be ignored.</p>
 <pre><code class="language-tokay"># This is my little program
@@ -256,21 +330,22 @@ $ ./hello.tok
 Hello World
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="basics"><a class="header" href="#basics">Basics</a></h1>
-<p>Basically, a Tokay program is established on these parts:</p>
+<p>Basically, a Tokay program is made of</p>
 <ul>
 <li>Items</li>
 <li>Sequences</li>
 <li>Blocks</li>
 </ul>
-<p>All these parts belong together and depend on each other in some way.</p>
-<p>The following Tokay program demonstrates the usage of all three of these parts in action.</p>
+<p>All these belong together and depend on each other in some way.</p>
+<p>The following program demonstrates the usage of <em>items</em>, <em>sequences</em> and <em>blocks</em> in action:</p>
 <pre><code class="language-tokay">{ # A block...
     # ... is made of sequences
-    'Hello' _ Name count_hello++   # ... which are made of items.
+    'Hello' _ Name \
+        count_hello++   # ... which are made of items (4 items here).
 
     'Goodbye' _ {  # an item of a sequence can be a block again
-        'Max'  count_bye_max++  # ... which contains one sequences with items
-        Name   count_bye++      # ... and a second one, too.
+        'Max'  count_bye_max++  # ... which contains other sequences...
+        Name   count_bye++      # ... made of items again.
     }
 
     {}  # a sequence with an empty block as its item
@@ -283,10 +358,10 @@ Hello World
 <li>An occurence of <code>Goodbye Max</code>, which is a special case here, counts on <code>count_bye_max</code>.</li>
 </ul>
 <blockquote>
-<p>If you are familiar with the <em>Awk programming language</em>, you might see some similarities to the <code>PATTERN { action }</code>-syntax here.</p>
+<p>If you are familiar with the <em>AWK programming language</em>, you might see some similarities to the <code>PATTERN { action }</code>-syntax here.</p>
 <p>In Tokay, <em>PATTERN</em> can be any sequence of items that need to match before, and <em>{ action }</em> can hold further <code>PATTERN { action }</code>-components.</p>
 </blockquote>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="items"><a class="header" href="#items">Items</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="items-1"><a class="header" href="#items-1">Items</a></h1>
 <p>Items are the atomic parts of sequences, and represent values.</p>
 <p>The following examples for items are direct values that, once specified, stay on their own.</p>
 <pre><code class="language-tokay">123               # the number 123
@@ -337,7 +412,7 @@ push &quot;yes&quot;        # pushes result value &quot;yes&quot;
 <p>Right now, this isn't so important, and you shouldn't keep this in mind all the time. It will become useful during the next chapters, and especially when writing programs that parse or extract data off something.</p>
 <h2 id="conclusion"><a class="header" href="#conclusion">Conclusion</a></h2>
 <p>In conclusion, an item is the result of some expression which always stands for a value. An item in turn is part of a sequence. Every item has a hidden severity, which is important for constructing values from sequences later on.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="sequences"><a class="header" href="#sequences">Sequences</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="sequences-1"><a class="header" href="#sequences-1">Sequences</a></h1>
 <p>Sequences are occurences of items in a row.</p>
 <p>Here is a sequence of three items:</p>
 <pre><code class="language-tokay">1 2 3 + 4    # results in a list (1, 2, 7)
@@ -515,11 +590,12 @@ push &quot;yes&quot;        # pushes result value &quot;yes&quot;
 <p>Sequences define occurences of items. An item inside of a sequence can have a meanigful alias.</p>
 <p>Every item of a sequence that has been executed is called <em>a capture</em>, and can be accessed using context-variables, either by their offset (position of occurence) like <code>$1</code>, <code>$2</code>, <code>$3</code> or by their alias, like <code>$predicate</code>.</p>
 <p>The special capture <code>$0</code> provides the consumed information read so far by the parselet, and can also be set to a value.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="blocks"><a class="header" href="#blocks">Blocks</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="blocks-1"><a class="header" href="#blocks-1">Blocks</a></h1>
 <p>Sequences are organized in blocks. Blocks may contain several sequences, which are executed in order of their definition. Every sequence inside of a block is separated by a newline.</p>
 <p>The main scope of a Tokay program is also an implicit block, therefore it is not necessary to start every program with a new block.</p>
 <h2 id="newlines"><a class="header" href="#newlines">Newlines</a></h2>
-<p>In Tokay, newlines (line-breaks, <code>\n</code> respectively) are meaningful. They separate sequences from each other, as you will learn in the next section.</p>
+<p>Newlines (line-breaks, <code>\n</code> respectively) are meaningful, and belong to the syntax of blocks.<br>
+They separate sequences inside a block from each other.</p>
 <pre><code class="language-tokay">&quot;1st&quot; &quot;sequence&quot;
 &quot;2nd&quot; &quot;sequence&quot;
 &quot;3rd&quot; &quot;sequence&quot;
@@ -530,17 +606,37 @@ push &quot;yes&quot;        # pushes result value &quot;yes&quot;
 &quot;2nd&quot; &quot;sequence&quot; ; &quot;3rd&quot; &quot;sequence&quot;
 </code></pre>
 <p>The first and second example are literally the same.</p>
+<h2 id="behavior"><a class="header" href="#behavior">Behavior</a></h2>
+<p>Blocks have two important purposes:</p>
+<p>First, they group sequences into items of other sequences.</p>
+<pre><code class="language-tokay"># typical use of a block
+if x &gt; 0 {
+    x += 1
+    print(&quot;x is now &quot; + x)
+}
+</code></pre>
+<p>Second, they provide alternations for sequences which consume input. Therefore, their behavior different in Tokay in comparison to other programming languages. When all sequences inside of a block don't consume any input, the block behaves exactly as in other languages. But when a sequence consumes input, the block might stop execution of alternatives (=sequences) before the end of the block is reached.</p>
+<pre><code class="language-tokay"># alternation behavior of a block, when used with tokens
+'Hello' _ {
+    checked = true  # always executed, consumes no input
+    'World' print(&quot;Hello World&quot;)
+    'Mars' print(&quot;Hello Mars&quot;)
+    print(&quot;Hello Unknown&quot;)  # fallback case
+}
+</code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="concepts"><a class="header" href="#concepts">Concepts</a></h1>
+<p>In this chapter we deal in detail with the basic concepts of Tokay.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="terminology"><a class="header" href="#terminology">Terminology</a></h1>
-<h2 id="identifiers"><a class="header" href="#identifiers">Identifiers</a></h2>
-<p>Naming rules for identifiers in Tokay differ to other programming languages, and this is an essential feature.</p>
+<p>First of all, there are some terms which are oftenly used in Tokay.</p>
+<h2 id="names-and-identifiers"><a class="header" href="#names-and-identifiers">Names and identifiers</a></h2>
+<p>The naming rules for identifiers in Tokay differ to other programming languages, and this is an essential feature.</p>
 <ol>
-<li>As known from other languages, identifiers may not start with any digit (<code>0-9</code>).</li>
-<li>Variables need to start with a lower-case letter from (<code>a-z</code>)</li>
-<li>Constants need to start either
+<li>Any identifier may not start with any digit (<code>Char&lt;0-9&gt;</code>).</li>
+<li>Variable names have to start with any lower-case letter (<code>Char&lt;a-z&gt;</code>)</li>
+<li>Constant names have to start either
 <ul>
-<li>with an upper-case letter (<code>A-Z</code>) or an underscore (<code>_</code>) when they refer consumable values,</li>
-<li>otherwise they can also start with a lower-case letter from (<code>a-z</code>).</li>
+<li>when they refer consumable values, with an upper-case letter or an underscore<br>(<code>Char&lt;A-Z_&gt;</code>)</li>
+<li>otherwise they can also start with a lower-case letter, likewise variable names<br>(<code>Char&lt;a-z&gt;</code>).</li>
 </ul>
 </li>
 </ol>
@@ -549,16 +645,16 @@ push &quot;yes&quot;        # pushes result value &quot;yes&quot;
 pi : 3.1415
 mul2 : @x { x * 2 }
 Planet : @{ 'Venus' ; 'Earth'; 'Mars' }
-the_Tribe = &quot;Apache&quot;
+the_Tribe = &quot;Cherokee&quot;
 
 # Invalid
 Pi : 3.1415  # float value is not consumable
 planet : @{ 'Venus' ; 'Earth'; 'Mars' }  # identifier must specify consumable
 The_Tribe = &quot;Cherokee&quot;  # Upper-case variable name not allowed
 
-9th = 9  # interpreted as '9 th = 9'
+9th = 9  # valid, but is interpreted as sequence `9 th = 9`
 </code></pre>
-<p>More about <em>consumable</em> and <em>non-consumable</em> values, <em>variables</em> and <em>constants</em> will be discussed later.</p>
+<p>More about <em>consumable</em> and <em>non-consumable</em> values, <em>variables</em> and <em>constants</em> is discussed shortly.</p>
 <h2 id="variables-and-constants"><a class="header" href="#variables-and-constants">Variables and constants</a></h2>
 <p>Symbolic identifiers for named values can either be defined as <em>variables</em> or <em>constants</em>.</p>
 <pre><code class="language-tokay">variable = 0  # assign 0 to a variable
@@ -566,28 +662,43 @@ constant : 0  # assign 0 to a constant
 </code></pre>
 <p>Obviously, this looks like the same. <code>variable</code> becomes 0 and <code>constant</code> also. Let's try to modify these values afterwards.</p>
 <pre><code class="language-tokay">variable += 1  # increment variable by 1
-constant += 1  # throws compile error: Cannot assign to constant 'constant'
+constant += 1  # throws compiler error: Cannot assign to constant 'constant'
 </code></pre>
 <p>Now <code>variable</code> becomes 1, but <code>constant</code> can't be assigned and Tokay throws a compile error.
 What you can do is to redefine the constant with a new value.</p>
 <pre><code class="language-tokay">variable++    # increment variable by 1
 constant : 1  # re-assign constant to 1
 </code></pre>
-<p>The reason is, that variables are evaluated at runtime, whereas constants are evaluated at compile-time, before the program is being executed.</p>
+<p>The reason is, that <em>variables</em> are evaluated at runtime, whereas <em>constants</em> are evaluated at compile-time, before the program is being executed.</p>
 <p>The distinction between variables and constants is a tradeoff between flexibility and predictivity to make different concepts behind Tokay possible. The values of variables aren't known at compile-time, therefore predictive construction of code depending on the values used is not possible. On the other hand, constants can be used before their definition, which is very useful when thinking of functions being called by other functions before their definition.</p>
 <h2 id="callables-and-consumables"><a class="header" href="#callables-and-consumables">Callables and consumables</a></h2>
-<p>From the object types presented above, tokens and functions have the special properties that they are <em>callable</em> and possibly <em>consumable</em>.</p>
-<ul>
-<li>Tokens are always callable and considered to consume input</li>
-<li>Functions are always callable and are named
-<ul>
-<li><em>parselets</em> when they consume input by either using tokens or a consumable constant</li>
-<li><em>functions</em> when they don't consume any input</li>
-</ul>
-</li>
-</ul>
-<p>For variables and constants, special naming rules apply which allow Tokay to determine a symbol type based on its identifier only.</p>
-<p><em>todo: This section is a stub. More examples and detailed explanations needed here.</em></p>
+<p>Some values are callable. Generally, all tokens, functions and builtins are <em>callable</em>.</p>
+<p>Here are some usages of callables:</p>
+<pre><code class="language-tokay">int(&quot;123&quot;)        # Builtin int constructor
+Int               # Builtin Int parser token
+Char&lt;A-Z&gt;         # builtin char token
+'Check'           # Touch token 'Check'
+''Bold''          # Match token 'Bold'
+
+s = &quot;Hello&quot;
+s.upper           # calls method 'str_upper', returns &quot;HELLO&quot;
+s[0]              # Internally call 'str_get_item', returns &quot;H&quot;
+
+f : @x { x * 2 }  # function definition
+f(42)             # function call, producing 84
+</code></pre>
+<p>Additionally, a callable can be attributed to be <em>consumable</em>. This is the case when the callable either makes use of another consumable callable, or it direcly consumes input. Consumables are always identified by either starting with an upper-case letter or an underscore. A function which makes use of a consumable is called <em>parselet</em>.</p>
+<pre><code class="language-tokay"># invalid attempt; the parselet makes use of consumables,
+# but is assigned to a name for a non-consumable constant.
+assign : @{
+    Ident _ expect '=' _ expect Expr
+}
+
+# creating a parselet
+Assign : @{
+    Ident _ expect '=' _ expect Expr
+}
+</code></pre>
 <h2 id="scopes"><a class="header" href="#scopes">Scopes</a></h2>
 <p>Variables and constants are organized in scopes.</p>
 <ol>
@@ -622,27 +733,26 @@ true false     # boolean values
 <p>Using the builtin function <code>bool(v)</code>, a boolean value can be constructed from any other value <code>v</code>, by testing for truth.</p>
 <h2 id="numbers"><a class="header" href="#numbers">Numbers</a></h2>
 <p>Tokay supports <code>int</code> and <code>float</code> as numeric types.</p>
-<pre><code class="language-tokay">42 -23         # signed 64-bit integer number object
+<pre><code class="language-tokay">42 -23         # signed integer number object of arbitrary size (bigint)
 3.1415 -1.337  # signed 64-bit float number object
 </code></pre>
 <p>For numbers, the following methods can be used:</p>
 <ul>
-<li><code>int(v)</code> contructs an int value from any other value <code>v</code></li>
-<li><code>float(v)</code> contructs a float value from any other value <code>v</code></li>
+<li><code>int(v)</code> - contructs an int value from any other value <code>v</code></li>
+<li><code>float(v)</code> - contructs a float value from any other value <code>v</code></li>
 <li><code>float.ceil()</code> - returns the next integer ceiling of a float</li>
 <li><code>float.fract()</code> - returns only the fractional part of a float</li>
 <li><code>float.trunc()</code> - truncates the fractional part off a float</li>
 </ul>
-<blockquote>
-<p>As of Tokay v0.5, the internal implementation of numbers is unstable, and will be clarified in a future version. See <a href="https://github.com/tokay-lang/tokay/issues/52">#52</a> for details.</p>
-</blockquote>
 <h2 id="strings"><a class="header" href="#strings">Strings</a></h2>
-<p>A string (&quot;str&quot;) is a unicode-character sequence of arbitrary length.</p>
+<p>A string (<code>str</code>) is a unicode-character sequence of arbitrary length.</p>
 <pre><code class="language-tokay">s = &quot;Tokay 🦎&quot;
 s = s + &quot; is cool&quot;
 s += &quot;!&quot;
 </code></pre>
-<p>Str objects can be concatenated by the <code>+</code>- and <code>+=</code>-operators, multiplied by the <code>*</code>- and <code>*=</code>-operators and provide the following methods:</p>
+<p><code>str</code> objects can be concatenated by the operators <code>+</code> and <code>+=</code>.<br>
+They can also be multiplied by the operators <code>*</code> and <code>*=</code>.</p>
+<p>Additionally, they provide the following methods:</p>
 <ul>
 <li><code>str(v)</code> - constructs a string object from any other value <code>v</code></li>
 <li><code>str.byteslen()</code> - return total length of bytes used by the string</li>
@@ -660,11 +770,14 @@ s += &quot;!&quot;
 <pre><code class="language-tokay"># list of values
 (42, true, &quot;yes&quot;)
 l = (42 true &quot;yes&quot;)
-l.len()  # 3
+l[1] = false
+l.push(&quot;🦎&quot;)
+l.len()  # 4
 </code></pre>
 <p>Lists can be concatenated by the <code>+</code>- and <code>+=</code>-operators, and provide the following methods:</p>
 <ul>
 <li><code>list(*args)</code> - constructs a new list from all arguments provided</li>
+<li><code>list.flatten()</code> - integrates items of lists inside a list into itself</li>
 <li><code>list.len()</code> - returns number of items in the list</li>
 <li><code>list.push(item, index=void)</code> - either appends an <code>item</code> to the list or inserts it at position <code>index</code></li>
 <li><code>list.pop(index=void)</code> - either pops the last item off the list or removes and returns item at position <code>index</code></li>
@@ -672,29 +785,33 @@ l.len()  # 3
 <h2 id="dicts"><a class="header" href="#dicts">Dicts</a></h2>
 <p>Dictionaries (&quot;dicts&quot;) are hash tables or maps with key-value-pairs, where a value is referenced by using the key as its storage location.</p>
 <pre><code class="language-tokay"># dictionary (dict), a map of key-value-pairs
-(i =&gt; 42, b =&gt; true, status =&gt; &quot;success&quot;)
-d = (i =&gt; 42 b =&gt; true status =&gt; &quot;success&quot;)
-d.update((x =&gt; 23.5))
+(i =&gt; 42, b =&gt; true, status =&gt; &quot;success&quot;, true =&gt; false)
+d = (i =&gt; 42 b =&gt; true status =&gt; &quot;success&quot; true =&gt; false)
+d[&quot;angle&quot;] = 23.5  # add key &quot;angle&quot;
+d[&quot;i&quot;] = void  # remove key &quot;i&quot;
 </code></pre>
-<blockquote>
-<p>Currently, as of Tokay v0.5 and below, Dicts in Tokay only support for strings as keys. This behavior is currently discussed and may change in a future version! This is also the reason for a lack of method implementations for dicts currently. See <a href="https://github.com/tokay-lang/tokay/issues/50">#50</a> for details.</p>
-</blockquote>
-<p>In Tokay v0.5, dicts provide the following methods:</p>
+<p>Dicts provide the following methods:</p>
 <ul>
 <li><code>dict()</code> - creates a new, empty dict</li>
+<li><code>dict_clone()</code> - create an independ copy of dict</li>
+<li><code>dict_items()</code> - returns a list of lists (key, value)</li>
+<li><code>dict_keys()</code> - returns a list of keys</li>
 <li><code>dict.len()</code> - returns number of items in the dict</li>
-<li><code>dict.update(other)</code> - merges two dicts</li>
+<li><code>dict.merge(other)</code> - merges antoher dict into the dict</li>
+<li><code>dict_pop(k=void, d=void)</code> - remove and return k from dict; returns d when key is not present; when k is not present, the last item will be removed.</li>
+<li><code>dict_push(k, v)</code> - insert v as key k into dict</li>
+<li><code>dict_values()</code> - returns a list of values</li>
 </ul>
-<h2 id="tokens-1"><a class="header" href="#tokens-1">Tokens</a></h2>
+<h2 id="tokens"><a class="header" href="#tokens">Tokens</a></h2>
 <p>Tokens are callables consuming input from the stream. They are object values as well. They always return a value parsed from the input stream in case the token matches. Otherwise, tokens usually reject the current block branch or parselet, to try other alternatives.</p>
-<pre><code class="language-tokay">'touch'    # silently touch a string in the input (low severity)
-''match''  # verbosely match a string from the input (high severity)
-[A-Z0-9]+  # matching a sequence of multiple valid characters
-Int        # built-in token for parsing and returning Integer values
-Word(3)    # built-in token Word, matching at least words of length 3
+<pre><code class="language-tokay">'touch'        # silently touch a string in the input (low severity)
+''match''      # verbosely match a string from the input (high severity)
+Char&lt;A-Z0-9&gt;+  # matching a sequence of multiple valid characters
+Int            # built-in token for parsing and returning Integer values
+Word(3)        # built-in token Word, matching at least words of length 3
 </code></pre>
 <blockquote>
-<p>In terms of a compiler engineer, tokens in Tokay are the terminal symbols of a context-free grammar.</p>
+<p>In terms of parsing, tokens are the terminal symbols of a context-free grammar.</p>
 </blockquote>
 <h2 id="functions-and-parselets"><a class="header" href="#functions-and-parselets">Functions and parselets</a></h2>
 <p>Functions are sub-programs for a specific task or routine which can be used for multiple tasks. A function can accept arguments with default values.</p>
@@ -716,11 +833,11 @@ Assign
 # ... returns dict `(variable =&gt; &quot;n&quot;, value =&gt; 42)`
 </code></pre>
 <blockquote>
-<p>In terms of a compiler engineer, parsing functions (in Tokay called &quot;parselets&quot;) are considered as non-terminal symbols of a context-free grammar.</p>
+<p>In terms of parsing, parselets are considered as non-terminal symbols of a context-free grammar.</p>
 </blockquote>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="tokens-2"><a class="header" href="#tokens-2">Tokens</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="tokens-1"><a class="header" href="#tokens-1">Tokens</a></h1>
 <p>Tokens are the fundamental building blocks used to process input. Tokay implements first-level tokens which direcly consume input, but usages of parselets, which are functions consuming input, are considered as second-level tokens, and are at least tokens as well.</p>
-<h2 id="touch--match"><a class="header" href="#touch--match">Touch &amp; match</a></h2>
+<h2 id="touch-and-match"><a class="header" href="#touch-and-match"><code>'touch'</code> and <code>''match''</code></a></h2>
 <p>To match exact strings of characters from the input, like keywords, the <em>match</em> and <em>touch</em> token-type is used. Touch was yet mostly used in our examples, but match is also useful, depending on use-case.</p>
 <pre><code class="language-tokay">'Touch'    # match string in the input and discard
 ''Match''  # match string in the input and take
@@ -733,22 +850,35 @@ Both type of matches can be referred by capture variables, therefore</p>
 <p>Check out the following one-liner when executed on the input <code>1+2-3+4</code>, it will return <code>(1, &quot;+&quot;, (2, (3, &quot;+&quot;, 4)))</code>. The matches on the plus (<code>''+''</code>) is taken into the result, the touch on minus (<code>'-'</code>) are discarded.</p>
 <pre><code class="language-tokay">E : { E ''+'' E ; E '-' E; Integer }; E
 </code></pre>
-<h2 id="character-classes"><a class="header" href="#character-classes">Character-classes</a></h2>
-<p>Character tokens are expressed as character-classes known from regular expressions. They are encapsulated in brackets <code>[...]</code> and allow for a specification of ranges or single characters.</p>
+<h2 id="char"><a class="header" href="#char"><code>Char</code></a></h2>
+<p>To match a character, the <code>Char</code>-token is both builtin and part of Tokay's syntax.</p>
 <ul>
-<li>Single Characters are either specified by a Unicode-character or an escape sequence</li>
-<li>Ranges are delimited by a dash (<code>-</code>). If a Max-Min-Range is specified, it is automatically converted into a Min-Max-Range, so <code>[z-a]</code> becomes <code>[a-z]</code>.</li>
+<li>Single characters are either specified by a Unicode-character or an escape sequence</li>
+<li>Ranges are delimited by a dash (<code>-</code>). If a Max-Min-Range is specified, it is automatically converted into a Min-Max-Range, so <code>Char&lt;z-a&gt;</code> is equal to <code>Char&lt;a-z&gt;</code>.</li>
 <li>If a dash (<code>-</code>) should be part of the character-class, it should be specified first or last.</li>
-<li>If a circumflex (<code>^</code>) is specified as first character in the character-class, the character-class will be inverted, so <code>[^a-z]</code> matches everything except <code>a</code> to <code>z</code>.</li>
+<li>If a circumflex (<code>^</code>) is specified as first character in the character-class, the character-class will be inverted, so <code>Char&lt;^a-z&gt;</code> matches everything except <code>a</code> to <code>z</code>.</li>
 </ul>
-<pre><code class="language-tokay">[a]           # just &quot;a&quot;
-[az]          # either &quot;a&quot; or &quot;z&quot;
-[abc]         # &quot;a&quot;, &quot;b&quot; or &quot;c&quot;
-[a-c]         # &quot;a&quot;, &quot;b&quot; or &quot;c&quot; also
-[a-zA-Z0-9_]  # All ASCII digit or letter and underscore
-[^0-9]        # Any character except ASCII digits
-[-+*/]        # Mathematical base operators (minus-dash first!)
+<pre><code class="language-tokay">Char              # any character
+Char&lt;a&gt;           # just &quot;a&quot;
+Char&lt;az&gt;          # either &quot;a&quot; or &quot;z&quot;
+Char&lt;a-z&gt;         # any character from &quot;a&quot; to &quot;z&quot;
+Char&lt;a-zA-Z0-9_&gt;  # All ASCII digit or letter and underscore
+Char&lt;^0-9&gt;        # Any character except ASCII digits
+Char&lt;-+*/&gt;        # Mathematical base operators (minus-dash first!)
 </code></pre>
+<blockquote>
+<p>When using the <code>Char</code>-token with the multiplicative operators <code>+</code> (many repetition) or <code>*</code> (kleene, none or many), they are internally revised to a <code>Chars</code>-version, for better performance.</p>
+</blockquote>
+<h2 id="builtin-tokens"><a class="header" href="#builtin-tokens">Builtin tokens</a></h2>
+<p>The following tokens are builtin and can be parametrized.</p>
+<ul>
+<li><code>Ident</code> - parses any C-style idenfifier name</li>
+<li><code>Int(base=10, with_signs=true)</code> - parses an int-value to the provided base, optionally with <code>+</code> or <code>-</code> signs</li>
+<li><code>Float(with_signs=true)</code> - parses a float-value, optionally with <code>+</code> or <code>-</code> signs</li>
+<li><code>Number</code> - parses <code>Float</code> or <code>Int</code></li>
+<li><code>Token</code> - either parses <code>Number</code>, <code>Word</code> or <code>AsciiPunctuation</code></li>
+<li><code>Word(min=1, max=void)</code> - parses any word, number, etc. with the specified <code>min</code>- and <code>max</code>-length</li>
+</ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="parselets"><a class="header" href="#parselets">Parselets</a></h1>
 <blockquote>
 <p>Currently this chapter is an unfinished work-in-progress.</p>
@@ -847,6 +977,9 @@ loop {
     print(i)
 }
 </code></pre>
+<blockquote>
+<p>This syntax is abandoned. The upcoming version 0.7 of Tokay will only support <code>for...in</code>.</p>
+</blockquote>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="appendix"><a class="header" href="#appendix">Appendix</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="appendix-a-keywords"><a class="header" href="#appendix-a-keywords">Appendix A: Keywords</a></h1>
 <p>In Tokay, the following keywords are reserved words for control structures, values and special operators.</p>
@@ -877,6 +1010,7 @@ loop {
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="appendix-b-operators"><a class="header" href="#appendix-b-operators">Appendix B: Operators</a></h1>
 <p>Tokay implements the following operators for use in expressions. The operators are ordered by precedence, operators in the same row share the same precedence.</p>
+<p>Don't confuse with some rows which look as redundant, this depends on either the operator is delimited by whitespace from its operands or not.</p>
 <table>
     <thead>
         <tr class="title">
@@ -893,7 +1027,7 @@ loop {
     </thead>
     <tbody>
         <tr>
-            <td>= += -= *= /=</td>
+            <td>=<br>+=<br>-=<br>*=<br>/=<br>//=<br>%=</td>
             <td>Assignment, combined operation-assignment</td>
             <td>left</td>
         </tr>
@@ -908,33 +1042,38 @@ loop {
             <td>left</td>
         </tr>
         <tr>
-            <td>== != < <= >= ></td>
-            <td>Equal, unequal, Comparison</td>
+            <td>==<br>!=<br><<br><=<br>>=<br>></td>
+            <td>Equal, unequal, comparison</td>
             <td>left</td>
         </tr>
         <tr>
-            <td>+ -</td>
+            <td>+<br>-</td>
             <td>Add, subtract</td>
             <td>left</td>
         </tr>
         <tr>
-            <td>* /</td>
-            <td>Multiply, divide</td>
+            <td>*<br>/<br>//<br>%</td>
+            <td>Multiply, divide, integer divide, modulo</td>
             <td>left</td>
         </tr>
         <tr>
-            <td>- !</td>
+            <td>-<br>!</td>
             <td>Negate, not</td>
             <td>right</td>
         </tr>
         <tr>
-            <td>++ --</td>
+            <td>++<br>--</td>
             <td>Increment, decrement</td>
             <td>right</td>
         </tr>
         <tr>
-            <td>() [] .</td>
-            <td>Grouping, subscript, attribute</td>
+            <td>(...)</td>
+            <td>Inline sequence</td>
+            <td>left</td>
+        </tr>
+        <tr>
+            <td>(...)<br>[...]<br>.</td>
+            <td>Call parameters, subscript, attribute</td>
             <td>left</td>
         </tr>
     </tbody>
@@ -983,7 +1122,7 @@ loop {
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="appendix-d-builtins"><a class="header" href="#appendix-d-builtins">Appendix D: Builtins</a></h1>
 <h2 id="functions-1"><a class="header" href="#functions-1">Functions</a></h2>
-<h2 id="tokens-3"><a class="header" href="#tokens-3">Tokens</a></h2>
+<h2 id="tokens-2"><a class="header" href="#tokens-2">Tokens</a></h2>
 <p>The following tokens are built into Tokay and can be used immediatelly. Programs can override these constants on-demand.</p>
 <table>
     <thead>
@@ -1002,7 +1141,6 @@ loop {
     <tbody>
         <tr><td>Alphabetic</td><td>Alphabetics</td><td>All Unicode characters having the Alphabetic property</td></tr>
         <tr><td>Alphanumeric</td><td>Alphanumerics</td><td>The union of Alphabetic and Numeric</td></tr>
-        <tr><td>Any / .</td><td>-</td><td>Any character, except EOF</td></tr>
         <tr><td>Ascii</td><td>Asciis</td><td>All characters within the ASCII range.</td></tr>
         <tr><td>AsciiAlphabetic</td><td>AsciiAlphabetics</td><td>All ASCII alphabetic characters <code>[A-Za-z]</code></td></tr>
         <tr><td>AsciiAlphanumeric</td><td>AsciiAlphanumerics</td><td>ASCII alphanumeric characters <code>[0-9A-Za-z]</code></td></tr>
@@ -1014,6 +1152,8 @@ loop {
         <tr><td>AsciiPunctuation</td><td>AsciiPunctuations</td><td>All ASCII punctuation characters <code>[-!"#$%&'()*+,./:;<=>?@[\\\]^_`{|}~]</code></td></tr>
         <tr><td>AsciiUppercase</td><td>AsciiUppercases</td><td>All ASCII uppercase characters <code>[A-Z]</code></td></tr>
         <tr><td>AsciiWhitespace</td><td>AsciiWhitespaces</td><td>All characters defining ASCII whitespace <code>[ \t\n\f\r]</code></td></tr>
+        <tr><td>Char</td><td>Chars</td><td>Any character, except EOF</td></tr>
+        <tr><td>Char<...></td><td>Chars<...></td><td>Any character of specified character-class, except EOF</td></tr>
         <tr><td>Control</td><td>Controls</td><td>All Unicode characters in the controls category</td></tr>
         <tr><td>Digit</td><td>Digits</td><td>ASCII decimal digits <code>[0-9]</code></td></tr>
         <tr><td>EOF</td><td>-</td><td>Matches End-Of-File.</td></tr>
@@ -1021,7 +1161,7 @@ loop {
         <tr><td>Numeric</td><td>Numerics</td><td>All Unicode characters in the numbers category</td></tr>
         <tr><td>Uppercase</td><td>Uppercases</td><td>All Unicode characters having the Uppercase property</td></tr>
         <tr><td>Whitespace</td><td>Whitespaces</td><td>All Unicode characters having the White_Space property</td></tr>
-        <tr><td>Void</td><td>-</td><td>The empty token, which consuming nothing, but consumes!</td></tr>
+        <tr><td>Void</td><td>-</td><td>The empty token, which consuming nothing. But it consumes!</td></tr>
     </tbody>
 </table>
 <p>The respective properties of the built-in character classes is described in Chapter 4 (Character Properties) of the <a href="https://www.unicode.org/versions/latest/">Unicode Standard</a> and specified in the <a href="https://www.unicode.org/reports/tr44">Unicode Character Database</a> in <a href="https://www.unicode.org/Public/UCD/latest/ucd/DerivedCoreProperties.txt">DerivedCoreProperties.txt</a>.</p>
@@ -1096,22 +1236,22 @@ loop {
 
 
 
-        <script type="text/javascript">
+        <script>
             window.playground_copyable = true;
         </script>
 
 
-        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
 
-        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
-        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
 
         <!-- Custom JS scripts -->
 
-        <script type="text/javascript">
+        <script>
         window.addEventListener('load', function() {
             window.setTimeout(window.print, 100);
         });
