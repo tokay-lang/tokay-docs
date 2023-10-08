@@ -1,4 +1,4 @@
-# Terminology
+# Variables
 
 First of all, there are some terms which are oftenly used in Tokay.
 

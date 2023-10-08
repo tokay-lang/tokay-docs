@@ -1,28 +1,75 @@
 # Sequences
 
-Sequences are occurences of items in a row.
+Sequences are multiple expressions in a row.
 
-Here is a sequence of three items:
+In its simplest form, a sequence is just one expression - as it is the case in the previous section. When multiple expressions are provided, they either construct a `list` or a `dict`, depending on the expressions' configuration and item severity.
+
+Here is a sequence of three expressions:
 ```tokay
 1 2 3 + 4    # results in a list (1, 2, 7)
 ```
-For better readability, items of a sequence can be optionally separated by commas (`,`), so
+For a better readability, expressions of a sequence can be optionally separated by commas (`,`), so
 ```tokay
 1, 2, 3 + 4  # (1, 2, 7)
 ```
 encodes the same.
 
-All items of a sequence with a given severity are used to determine the result of the sequence. Therefore, these sequences return `(1, 2, 7)` in the above examples when entered in a Tokay REPL. This has to deal with the [severities](items.html#severities) the items own.
-
-The end of the sequence is delimited by a line-break, but the sequence can be wrapped into to multiple using a backslash before the line-break. So
-
+The end of the sequence is delimited by a line-break, but the sequence can be wrapped into to multiple lines using a backslash (`\`) before the line-break. So
 ```tokay
 1, 2 \
 3 + 4  # (1, 2, 7)
 ```
 means also the same as above.
 
+Expressions within a sequence are also called *captures*. This is because the values are being captured on the stack before the sequence is collected into a `list` or a `dict`.
+
+Captures can also be named, which in their simplest form constructs a `dict`, like here:
+```
+a => 1, b => 2, c => 3 + 4   # results in a dict (a => 1, b => 2, c => 7)
+```
+
 ## Captures
+
+
+Expressions within a sequence are also called *captures*, as they are temporarily captured on the stack at runtime. It is possible to access or even modify captures within a sequence, using capture variables `$`.
+
+
+Items in sequences can be named
+```
+a => 1, b => 2, c => 3 + 4   # results in a dict (a => 1, b => 2, c => 7)
+```
+
+## Severities
+
+> This is not important for the first steps and programs with Tokay, but a fundamental feature of the magic behind Tokay's automatic value construction features, which will be discussed later. You should know about it!
+
+Every item has a severity, which defines its value's "weight".
+
+Tokay currently knows 4 levels of severitity:
+
+1. Whitespace
+2. Match
+3. Value
+4. Result
+
+The severity of an item depends on how it is constructed. For example
+
+```tokay
+123               # pushes 123 with severity 3
+_                 # matches whitespace
+'check'           # matches "check" in input and pushes it considered as match
+''check''         # matches "check" in input and pushes it considered as value
+'check' * 3       # matches "check" in input and repeats it 3 times, resuling in value
+push "yes"        # pushes result value "yes"
+```
+
+Right now, this isn't so important, and you shouldn't keep this in mind all the time. It will become useful during the next chapters, and especially when writing programs that parse or extract data off something.
+
+## Conclusion
+
+In conclusion, an item is the result of some expression which always stands for a value. An item in turn is part of a sequence. Every item has a hidden severity, which is important for constructing values from sequences later on.
+
+### Captures
 
 The already executed items of a sequence are captured, so they can be accessed inside of the sequence using *capture variables*.
 
@@ -54,7 +101,7 @@ It might be quite annoying, but the result of this sequence is a *dict* as shown
 
 > If you come from Python, you might already know about *list* and *dict* objects. Their behavior and meaning is similar in Tokay.
 
-## Parsing input sequences
+### Parsing input sequences
 
 As Tokay is a programming language with built-in parsing capabilities, let's see how parsing integrates to sequences and captures.
 
@@ -78,7 +125,7 @@ and we get the output
 
 You will see, it's regardless of how many whitespace you insert, the result will always be the same. The reason for this are the item [severities](items.html#severities) discussed earlier. Whitespace, used by the pre-defined constant `__`, has a lower severity, and therefore won't make it in the result of the sequence.
 
-### Using capture aliases
+#### Using capture aliases
 
 Captures can also have a name, called "alias". This is ideal for parsing, to give items meaningful names and make them independent from their position.
 
@@ -106,7 +153,7 @@ What to save? The planet!
 
 The advantage here is, that we can change the sequence to further items in between, and don't have to change all references to these items in the print function call, because they are identified by name, and not by their offset, which might have changed.
 
-### The capture variable $0
+#### The capture variable $0
 
 There is also a special capture variable `$0`. It contains the input captured by the currently executed parselet the sequence belongs to. A parselet is a function that consumes some sort of input, which will be discussed later.
 
@@ -213,11 +260,11 @@ As you can see, `$0` always contains the input matched so far from the start of 
 
 `$0` can also be assigned to any other value, which makes it the result of the parselet in case no other result of higher precedence was set.
 
-## Sequence interruption
+### Sequence interruption
 
 todo
 
-## Conclusion
+### Conclusion
 
 Sequences define occurences of items. An item inside of a sequence can have a meanigful alias.
 
