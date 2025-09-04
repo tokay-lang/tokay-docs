@@ -24,7 +24,7 @@ print("Hello World")  # printing welcome message to the user
 hash = "# this is a string"  # assign "# this is a string" to hash.
 ```
 
-Proving a shebang is also possible in case a Tokay source file shall be directly executable.
+Providing a shebang is also possible in case a Tokay source file shall be directly executable.
 
 ```tokay
 #!/bin/tokay

@@ -45,6 +45,7 @@ function hljs_tokay(hljs) {
 
     const BUILTINS = [
         "Char",
+        "Chars",
         "Float",
         "Ident",
         "Int",
