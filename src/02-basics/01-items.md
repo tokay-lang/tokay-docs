@@ -2,9 +2,9 @@
 
 Items are the atomic building blocks of a Tokay program.
 
-Items can be anything, but in the end, they yield some kind of value - and even when it's the `void` value, which simply represents nothing.
+Items can be anything, but in the end, they yield some kind of value - and even when it's the [`void` value](04-void.md), which simply represents nothing.
 
-> You can enter the following code directly into a REPL.
+> You can enter the following code directly into a Tokay REPL.
 > See how it works and which values you're getting.
 
 The simplest form of items are just values:
@@ -18,7 +18,8 @@ A list or a dict definition yields in a single item:
 ```tokay
 "this", "is", "a", "list"
 ("this", "is", "also", "a", "list")
-(this => "is" a => "dict")
+this => "is"  a => "dict"
+(this => "is"  "also a" => "dict")
 ```
 
 Assignments are also items, always yielding the value `void`:
@@ -28,20 +29,30 @@ x = y = 3
 y += 1
 ```
 
-The result of expressions, like mathematical calculations, are items as well:
+The result of expressions, like mathematical calculations, are all items as well:
 ```
 1 + 2 * (x + y)
 23 * "🦎"
 ```
 
 For sure, logical expressions are also items, as they yield into a single value:
-```
-x == 3
+```tokay
+x == 2 + 1
 x == 3 && y == 4
 s == "Hello Tokay" && x < y < 5
 ```
 
-Function calls return a value, so they are items:
+Tokay also provides inline increments and decrements, so given `i = 3`
+```tokay
+i++
+```
+yields item `3` (increment after yielding), and afterwards this,
+```tokay
+++i
+```
+yields item `5` (increment before yielding).
+
+Function calls return a value, so they are items as well
 ```tokay
 print(s)
 s.upper
