@@ -1,0 +1,4 @@
+# Logicals
+- not
+- and
+- or

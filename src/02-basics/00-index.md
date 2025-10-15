@@ -28,18 +28,30 @@ hash = "# this is a string"  # assign "# this is a string" to hash.
 
 ## Shebang
 
-Providing a [shebang (`#!`)](https://en.wikipedia.org/wiki/Shebang_(Unix)) in input files also possible in case a Tokay source file shall be directly executable.
+Providing a [shebang (`#!`)](https://en.wikipedia.org/wiki/Shebang_(Unix)) in input files is also possible in case a Tokay source file shall be directly executable.
 
 ```tokay
 #!/bin/tokay
 print("Hello World")
 ```
 
-This assumes `tokay` is installed to `/bin` on a Posix-like system, and the file is configured to be executable.
+This assumes `tokay` is installed to `/bin` and the file is configured to be executable.
 
 ```bash
 $ ls -lta hello.tok
 -rwxr-xr-x  hello.tok
 $ ./hello.tok
 Hello World
+```
+## Whitespace todo
+
+- The `\` whitespace operator
+- notes about where whitespace is relevant
+- 4-spaces for best readability
+- whitespace shall be used for good code readability
+	- good and bad examples
+	- best practises
+	- formatting dicts, lists, etc
+```tokay
+print(if s.len < 25 "A mid-long string" else "a longer string")
 ```
